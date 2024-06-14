@@ -12,7 +12,7 @@ export class Admin {
   @PrimaryGeneratedColumn()
   adminId: string;
 
-  @OneToOne(() => User, (user) => user.id)
+  @OneToOne(() => User, (user) => user.admin)
   @JoinColumn()
   user: User;
 
