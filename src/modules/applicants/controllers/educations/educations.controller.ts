@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
@@ -10,7 +11,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { EducationsService } from '../../services/educations/educations.service';
-import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreateEducationDto } from '../../dtos/education/create-education';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
 
@@ -21,9 +21,14 @@ export class EducationsController {
   @Get()
   async findAll(
     @Param('applicantId', ParseIntPipe) applicantId: number,
-    @Query() query: IPaginationOptions,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ) {
-    return await this.educationsService.findAll(applicantId, query);
+    return await this.educationsService.findAll(applicantId, {
+      page,
+      limit,
+      route: `http://localhost:3000/applicants/${applicantId}/educations`,
+    });
   }
 
   @Get(':educationId')

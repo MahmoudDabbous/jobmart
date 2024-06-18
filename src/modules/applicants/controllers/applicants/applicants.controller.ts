@@ -1,15 +1,28 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { ApplicantsService } from '../../services/applicants/applicants.service';
 import { Applicant } from 'src/database/entities/Applicant';
-import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 @Controller('applicants')
 export class ApplicantsController {
   constructor(private readonly applicantsService: ApplicantsService) {}
 
   @Get()
-  async findAll(@Query() pagination: IPaginationOptions) {
-    return await this.applicantsService.findAll(pagination);
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    return await this.applicantsService.findAll({
+      page,
+      limit,
+      route: 'http://localhost:3000/applicants',
+    });
   }
 
   @Get(':applicantId')

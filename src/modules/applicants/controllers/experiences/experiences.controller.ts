@@ -8,12 +8,12 @@ import {
   Query,
   ParseIntPipe,
   Patch,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { Experience } from 'src/database/entities/Experience';
 import { ExperiencesService } from '../../services/experiences/experiences.service';
 import { CreateExperienceDto } from '../../dtos/experience/create-experience.dto';
 import { UpdateExperienceDto } from '../../dtos/experience/update-experience.dto';
-import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 @Controller('applicants/:applicantId/experiences')
 export class ExperiencesController {
@@ -43,9 +43,14 @@ export class ExperiencesController {
   @Get()
   async findAll(
     @Param('applicantId', ParseIntPipe) applicantId: number,
-    @Query() query: IPaginationOptions,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
   ) {
-    return await this.experiencesService.findAll(applicantId, query);
+    return await this.experiencesService.findAll(applicantId, {
+      page,
+      limit,
+      route: `http://localhost:3000/applicants/${applicantId}/experiences`,
+    });
   }
 
   @Get(':experienceId')
