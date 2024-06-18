@@ -2,6 +2,7 @@ import { DatabaseModule } from './database/database.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { ApplicantsModule } from './modules/applicants/applicants.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
       envFilePath: '.env',
     }),
     DatabaseModule,
+    ApplicantsModule,
   ],
 })
 export class AppModule implements NestModule {
