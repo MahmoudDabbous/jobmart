@@ -23,12 +23,12 @@ export class EducationsController {
     @Param('applicantId', ParseIntPipe) applicantId: number,
     @Query() query: IPaginationOptions,
   ) {
-    return this.educationsService.findAll(applicantId, query);
+    return await this.educationsService.findAll(applicantId, query);
   }
 
   @Get(':educationId')
   async findOne(@Param('educationId', ParseIntPipe) educationId: number) {
-    return this.educationsService.findOne(educationId);
+    return await this.educationsService.findOne(educationId);
   }
 
   @Post('create')
@@ -36,7 +36,7 @@ export class EducationsController {
     @Param('applicantId', ParseIntPipe) applicantId: number,
     @Body() data: CreateEducationDto,
   ) {
-    return this.educationsService.create(applicantId, data);
+    return await this.educationsService.create(applicantId, data);
   }
 
   @Patch(':educationId/update')
@@ -44,11 +44,11 @@ export class EducationsController {
     @Param('educationId', ParseIntPipe) educationId: number,
     @Body() data: UpdateEducationDto,
   ) {
-    return this.educationsService.update(educationId, data);
+    return await this.educationsService.update(educationId, data);
   }
 
   @Delete(':educationId/delete')
   async delete(@Param('educationId', ParseIntPipe) educationId: number) {
-    return this.educationsService.delete(educationId);
+    return await this.educationsService.delete(educationId);
   }
 }

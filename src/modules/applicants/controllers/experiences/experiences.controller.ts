@@ -24,7 +24,7 @@ export class ExperiencesController {
     @Param('applicantId') applicantId: number,
     @Body() data: CreateExperienceDto,
   ): Promise<Experience> {
-    return this.experiencesService.create(applicantId, data);
+    return await this.experiencesService.create(applicantId, data);
   }
 
   @Patch(':experienceId')
@@ -32,12 +32,12 @@ export class ExperiencesController {
     @Param('experienceId') experienceId: number,
     @Body() data: UpdateExperienceDto,
   ): Promise<Experience> {
-    return this.experiencesService.update(experienceId, data);
+    return await this.experiencesService.update(experienceId, data);
   }
 
   @Delete(':experienceId')
   async delete(@Param('experienceId') experienceId: number): Promise<void> {
-    return this.experiencesService.delete(experienceId);
+    return await this.experiencesService.delete(experienceId);
   }
 
   @Get()
@@ -45,13 +45,13 @@ export class ExperiencesController {
     @Param('applicantId', ParseIntPipe) applicantId: number,
     @Query() query: IPaginationOptions,
   ) {
-    return this.experiencesService.findAll(applicantId, query);
+    return await this.experiencesService.findAll(applicantId, query);
   }
 
   @Get(':experienceId')
   async findOne(
     @Param('experienceId') experienceId: number,
   ): Promise<Experience> {
-    return this.experiencesService.findOne(experienceId);
+    return await this.experiencesService.findOne(experienceId);
   }
 }
