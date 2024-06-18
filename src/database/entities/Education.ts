@@ -6,15 +6,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './User';
+import { Applicant } from './Applicant';
 
 @Entity({ name: 'educations' })
 export class Education {
   @PrimaryGeneratedColumn()
-  educationId: string;
+  educationId: number;
 
-  @ManyToOne(() => User, (user) => user.educations)
-  user: User;
+  @ManyToOne(() => Applicant, (user) => user.educations)
+  applicant: Applicant;
 
   @Column()
   institution: string;
@@ -28,7 +28,7 @@ export class Education {
   @Column()
   startDate: Date;
 
-  @Column()
+  @Column({ nullable: true })
   endDate: Date;
 
   @Column()
