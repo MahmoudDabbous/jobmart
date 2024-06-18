@@ -24,10 +24,6 @@ export class ApplicantsService {
     return applicant;
   }
 
-  async create(applicant: Applicant): Promise<Applicant> {
-    return this.applicantRepository.save(applicant);
-  }
-
   async update(applicantId: number, applicant: Applicant): Promise<Applicant> {
     await this.applicantRepository.update(applicantId, applicant);
     const updatedApplicant = await this.applicantRepository.findOne({
