@@ -6,11 +6,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  BeforeInsert,
 } from 'typeorm';
 import { Applicant } from './Applicant';
 import { Admin } from './Admin';
 import { Experience } from './Experience';
 import { Education } from './Education';
+import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
 
 enum UserRole {
   ADMIN = 'admin',
@@ -20,7 +23,7 @@ enum UserRole {
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
-  userId: string;
+  userId: number;
 
   @Column()
   firstName: string;
@@ -35,6 +38,7 @@ export class User {
   phone: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({
@@ -43,6 +47,12 @@ export class User {
     default: UserRole.APPLICANT,
   })
   role: UserRole;
+
+  @Column({
+    nullable: true,
+  })
+  @Exclude()
+  public currentHashedRefreshToken?: string;
 
   @OneToOne(() => Applicant, (applicant) => applicant.user)
   applicant: Applicant;
@@ -61,4 +71,13 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+
+  async validatePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }
