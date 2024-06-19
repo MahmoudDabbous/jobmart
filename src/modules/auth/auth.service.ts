@@ -27,7 +27,7 @@ export class AuthService {
     }
     try {
       const createdUser = await this.usersService.create(signUpData);
-      this.eventEmitter.emit(USER_CREATED, createdUser.userId);
+      this.eventEmitter.emit(USER_CREATED, { userId: createdUser.userId });
       return createdUser;
     } catch (error) {
       throw new HttpException(
