@@ -52,7 +52,9 @@ export class AuthController {
       accessTokenCookie,
       refreshTokenCookie,
     ]);
-    return user;
+    const { password, currentHashedRefreshToken, ...result } = user; // eslint-disable-line
+    const userRes = { result };
+    return JSON.stringify(userRes.result);
   }
 
   @UseGuards(JwtAuthGuard)
