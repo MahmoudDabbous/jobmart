@@ -11,28 +11,36 @@ import { Applicant } from 'src/database/entities/Applicant';
 import { Education } from 'src/database/entities/Education';
 import { CreateEducationDto } from '../../dtos/education/create-education.dto';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
-import { ApplicantsService } from '../applicants/applicants.service';
 
 @Injectable()
 export class EducationsService {
   constructor(
     @InjectRepository(Education)
     private readonly educationRepository: Repository<Education>,
-    @InjectRepository(Applicant)
-    private readonly applicantService: ApplicantsService,
   ) {}
 
   async create(
     applicantId: number,
     data: CreateEducationDto,
   ): Promise<Education> {
-    const applicant = await this.applicantService.findOne(applicantId);
-    if (!applicant) {
-      throw new NotFoundException(`Applicant with ID ${applicantId} not found`);
-    }
-    const education = this.educationRepository.create(data);
-    education.applicant = applicant;
-    return await this.educationRepository.save(education);
+    const applicant = await this.educationRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const applicant = await transactionalEntityManager.findOne(Applicant, {
+          where: { applicantId },
+        });
+
+        if (!applicant) {
+          throw new NotFoundException(
+            `Applicant with ID ${applicantId} not found`,
+          );
+        }
+
+        const education = this.educationRepository.create(data);
+        education.applicant = applicant;
+        return education;
+      },
+    );
+    return await this.educationRepository.save(applicant);
   }
 
   async update(

@@ -16,23 +16,31 @@ export class ExperiencesService {
   constructor(
     @InjectRepository(Experience)
     private readonly experienceRepository: Repository<Experience>,
-    @InjectRepository(Applicant)
-    private readonly applicantRepository: Repository<Applicant>,
   ) {}
 
   async create(
     applicantId: number,
     data: CreateExperienceDto,
   ): Promise<Experience> {
-    const applicant = await this.applicantRepository.findOne({
-      where: { applicantId },
-    });
-    if (!applicant) {
-      throw new NotFoundException(`Applicant with ID ${applicantId} not found`);
-    }
-    const experience = this.experienceRepository.create(data);
-    experience.applicant = applicant;
-    return this.experienceRepository.save(experience);
+    const newExperience = await this.experienceRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const applicant = await transactionalEntityManager.findOne(Applicant, {
+          where: { applicantId },
+        });
+
+        if (!applicant) {
+          throw new NotFoundException(
+            `Applicant with ID ${applicantId} not found`,
+          );
+        }
+
+        const experience = this.experienceRepository.create(data);
+        experience.applicant = applicant;
+        return experience;
+      },
+    );
+
+    return await this.experienceRepository.save(newExperience);
   }
 
   async update(

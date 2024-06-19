@@ -5,13 +5,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   BeforeInsert,
 } from 'typeorm';
 import { Applicant } from './Applicant';
 import { Admin } from './Admin';
-import { Experience } from './Experience';
-import { Education } from './Education';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 

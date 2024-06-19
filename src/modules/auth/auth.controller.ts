@@ -13,7 +13,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/common/dto/createUser.dto';
+import { CreateUserDto } from 'src/common/dto/create-user.dto';
 import { LocalAuthGuard } from './guards/localAuth.guard';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { Response } from 'express';

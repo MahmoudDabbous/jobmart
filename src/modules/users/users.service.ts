@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from 'src/common/dto/createUser.dto';
+import { CreateUserDto } from 'src/common/dto/create-user.dto';
 import { User } from 'src/database/entities/User';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from 'src/common/dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -69,5 +70,10 @@ export class UsersService {
     return this.usersRepository.update(userId, {
       currentHashedRefreshToken: null,
     });
+  }
+
+  async update(userId: number, data: UpdateUserDto) {
+    await this.usersRepository.update(userId, data);
+    return await this.getById(userId);
   }
 }

@@ -1,15 +1,21 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApplicantsService } from '../../services/applicants/applicants.service';
-import { Applicant } from 'src/database/entities/Applicant';
+import { UpdateUserDto } from 'src/common/dto/update-user.dto';
+import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
 
 @Controller('applicants')
+@UseGuards(JwtAuthGuard)
 export class ApplicantsController {
   constructor(private readonly applicantsService: ApplicantsService) {}
 
@@ -33,11 +39,21 @@ export class ApplicantsController {
     return await this.applicantsService.findOne(applicantId);
   }
 
-  async update(applicantId: number, applicant: Applicant) {
+  @Patch(':applicantId')
+  async update(
+    @Param('applicantId', ParseIntPipe) applicantId: number,
+    @Body() applicant: UpdateUserDto,
+  ) {
     return this.applicantsService.update(applicantId, applicant);
   }
 
+  @Delete(':applicantId')
   async remove(applicantId: number) {
     return await this.applicantsService.remove(applicantId);
+  }
+
+  @Get('check-profile/:userId')
+  async profileIsComplete(userId: number) {
+    return await this.applicantsService.profileIsComplete(userId);
   }
 }

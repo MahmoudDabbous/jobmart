@@ -9,14 +9,20 @@ import { EducationsController } from './controllers/educations/educations.contro
 import { ExperiencesController } from './controllers/experiences/experiences.controller';
 import { Education } from 'src/database/entities/Education';
 import { Experience } from 'src/database/entities/Experience';
-
+import { UsersService } from '../users/users.service';
+import { User } from 'src/database/entities/User';
 @Module({
-  imports: [TypeOrmModule.forFeature([Applicant, Education, Experience])],
+  imports: [TypeOrmModule.forFeature([Applicant, Education, Experience, User])],
   controllers: [
     ApplicantsController,
     EducationsController,
     ExperiencesController,
   ],
-  providers: [ApplicantsService, EducationsService, ExperiencesService],
+  providers: [
+    ApplicantsService,
+    EducationsService,
+    ExperiencesService,
+    UsersService,
+  ],
 })
 export class ApplicantsModule {}

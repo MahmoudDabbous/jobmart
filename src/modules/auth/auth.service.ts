@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { CreateUserDto } from 'src/common/dto/createUser.dto';
+import { CreateUserDto } from 'src/common/dto/create-user.dto';
 import { User } from 'src/database/entities/User';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import TokenPayload from './interfaces/tokenPayload.interface';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { USER_CREATED } from 'src/common/constants/events';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +14,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async signUp(signUpData: CreateUserDto) {
@@ -24,6 +27,7 @@ export class AuthService {
     }
     try {
       const createdUser = await this.usersService.create(signUpData);
+      this.eventEmitter.emit(USER_CREATED, createdUser.userId);
       return createdUser;
     } catch (error) {
       throw new HttpException(
