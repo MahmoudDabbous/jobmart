@@ -9,7 +9,7 @@ import {
 
 import { Applicant } from 'src/database/entities/Applicant';
 import { Education } from 'src/database/entities/Education';
-import { CreateEducationDto } from '../../dtos/education/create-education';
+import { CreateEducationDto } from '../../dtos/education/create-education.dto';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
 import { ApplicantsService } from '../applicants/applicants.service';
 

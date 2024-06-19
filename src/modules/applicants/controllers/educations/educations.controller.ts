@@ -11,7 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { EducationsService } from '../../services/educations/educations.service';
-import { CreateEducationDto } from '../../dtos/education/create-education';
+import { CreateEducationDto } from '../../dtos/education/create-education.dto';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
 
 @Controller('applicants/:applicantId/educations')
