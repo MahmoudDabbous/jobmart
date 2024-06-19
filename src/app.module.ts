@@ -3,6 +3,8 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { ApplicantsModule } from './modules/applicants/applicants.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { ApplicantsModule } from './modules/applicants/applicants.module';
     }),
     DatabaseModule,
     ApplicantsModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {
