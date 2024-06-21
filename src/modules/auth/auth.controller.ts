@@ -48,6 +48,7 @@ export class AuthController {
     const { cookie: refreshTokenCookie, token: refreshToken } =
       this.authService.getCookieWithJwtRefreshToken(user.userId);
     await this.userService.setCurrentRefreshToken(refreshToken, user.userId);
+    request.res.setHeader('Content-Type', 'application/json');
     request.res.setHeader('Set-Cookie', [
       accessTokenCookie,
       refreshTokenCookie,
@@ -62,7 +63,10 @@ export class AuthController {
   async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
     await this.userService.removeRefreshToken(request.user.userId);
     response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
-    return response.sendStatus(200);
+    return response.status(200).json({
+      statusCode: 200,
+      message: 'Logout successful',
+    });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -72,6 +76,7 @@ export class AuthController {
     const user = request.user;
     const { password, ...result } = user; // eslint-disable-line
     const userRes = { result };
+    request.res.setHeader('Content-Type', 'application/json');
     return JSON.stringify(userRes.result);
   }
 
