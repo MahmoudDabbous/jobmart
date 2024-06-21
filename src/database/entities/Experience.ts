@@ -6,15 +6,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './User';
+import { Applicant } from './Applicant';
 
 @Entity({ name: 'experiences' })
 export class Experience {
   @PrimaryGeneratedColumn()
-  experienceId: string;
+  experienceId: number;
 
-  @ManyToOne(() => User, (user) => user.experiences)
-  user: User;
+  @ManyToOne(() => Applicant, (user) => user.experiences)
+  applicant: Applicant;
 
   @Column()
   title: string;

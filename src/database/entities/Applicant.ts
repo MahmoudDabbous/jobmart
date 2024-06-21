@@ -16,16 +16,16 @@ import { ApplicationDocument } from './ApplicationDocument';
 @Entity({ name: 'applicants' })
 export class Applicant {
   @PrimaryGeneratedColumn()
-  applicantId: string;
+  applicantId: number;
 
   @OneToOne(() => User, (user) => user.applicant)
   @JoinColumn()
   user: User;
 
-  @OneToMany(() => Education, (education) => education.user)
+  @OneToMany(() => Education, (education) => education.applicant)
   educations: Education[];
 
-  @OneToMany(() => Experience, (experience) => experience.user)
+  @OneToMany(() => Experience, (experience) => experience.applicant)
   experiences: Experience[];
 
   @OneToMany(() => Application, (application) => application.applicant)
