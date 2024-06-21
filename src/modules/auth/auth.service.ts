@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import TokenPayload from './interfaces/tokenPayload.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { USER_CREATED } from 'src/common/constants/events';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Injectable()
 export class AuthService {
@@ -89,5 +90,24 @@ export class AuthService {
       'Authentication=; HttpOnly; Path=/; Max-Age=0',
       'Refresh=; HttpOnly; Path=/; Max-Age=0',
     ];
+  }
+
+  async signUpAdmin(signUpData: CreateAdminDto) {
+    const user = await this.usersService.isEmailTaken(signUpData.email);
+    if (user) {
+      throw new HttpException(
+        'User with that email or phone already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    try {
+      const createdUser = await this.usersService.createAdmin(signUpData);
+      return createdUser;
+    } catch (error) {
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

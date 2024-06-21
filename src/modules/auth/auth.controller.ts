@@ -20,6 +20,7 @@ import { Response } from 'express';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import JwtRefreshGuard from './guards/jwtRefresh.guard';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -33,6 +34,13 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   signUp(@Body() signUpData: CreateUserDto) {
     return this.authService.signUp(signUpData);
+  }
+
+  @Post('admin/signup')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(ValidationPipe)
+  signUpAdmin(@Body() signUpData: CreateAdminDto) {
+    return this.authService.signUpAdmin(signUpData);
   }
 
   @Post('signin')
