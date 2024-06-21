@@ -41,8 +41,9 @@ export class ApplicantsService {
   }
 
   async findOne(applicantId: number): Promise<Applicant> {
+    const user = await this.userService.getById(applicantId);
     const applicant = await this.applicantRepository.findOne({
-      where: { applicantId: applicantId },
+      where: { user: user },
       relations: ['user', 'experiences', 'educations'],
     });
     if (!applicant) {
@@ -66,7 +67,12 @@ export class ApplicantsService {
     return applicant;
   }
   async remove(applicantId: number): Promise<void> {
-    const deleteResult = await this.applicantRepository.delete(applicantId);
+    const user = await this.findOne(applicantId);
+
+    const deleteResult = await this.applicantRepository.delete({
+      applicantId: user.applicantId,
+    });
+
     if (!deleteResult.affected) {
       throw new NotFoundException(`Applicant with ID ${applicantId} not found`);
     }
