@@ -41,11 +41,22 @@ export class ApplicantsService {
   }
 
   async findOne(applicantId: number): Promise<Applicant> {
-    const user = await this.userService.getById(applicantId);
-    const applicant = await this.applicantRepository.findOne({
-      where: { user: user },
-      relations: ['user', 'experiences', 'educations'],
-    });
+    const qb = this.applicantRepository.createQueryBuilder('applicant');
+    qb.leftJoinAndSelect('applicant.user', 'user');
+    qb.leftJoinAndSelect('applicant.experiences', 'experiences');
+    qb.leftJoinAndSelect('applicant.educations', 'educations');
+    qb.select([
+      'applicant',
+      'user.userId',
+      'user.firstName',
+      'user.lastName',
+      'user.email',
+      'user.phone',
+      'experiences',
+      'educations',
+    ]);
+    qb.where('user.userId = :userId', { userId: applicantId });
+    const applicant = await qb.getOne();
     if (!applicant) {
       throw new NotFoundException(`Applicant with ID ${applicantId} not found`);
     }
