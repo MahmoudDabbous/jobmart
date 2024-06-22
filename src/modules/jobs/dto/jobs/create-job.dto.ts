@@ -1,5 +1,4 @@
 import {
-  IsArray,
   IsDateString,
   IsNotEmpty,
   IsNumber,
@@ -23,21 +22,18 @@ export class CreateJobDto {
   numberOfVacancies?: number;
 
   @IsNumber()
-  @IsArray({ each: true })
   @IsOptional()
-  jobCategoryId?: Array<number>;
+  jobCategoryId?: number;
 
   @IsNumber()
-  @IsArray({ each: true })
   @IsOptional()
-  jobPositionId?: Array<number>;
+  jobPositionId?: number;
 
   @IsNumber()
-  @IsArray({ each: true })
   @IsOptional()
-  jobPlatformId?: Array<number>;
+  jobPlatformId?: number;
 
-  @IsNumber()
+  @IsNumber({}, { message: 'Process ID must be a number.' })
   @IsOptional()
   processId?: number;
 }
