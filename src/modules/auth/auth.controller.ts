@@ -20,6 +20,7 @@ import { Response } from 'express';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import JwtRefreshGuard from './guards/jwtRefresh.guard';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +36,13 @@ export class AuthController {
     return this.authService.signUp(signUpData);
   }
 
+  @Post('admin/signup')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(ValidationPipe)
+  signUpAdmin(@Body() signUpData: CreateAdminDto) {
+    return this.authService.signUpAdmin(signUpData);
+  }
+
   @Post('signin')
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
@@ -48,6 +56,7 @@ export class AuthController {
     const { cookie: refreshTokenCookie, token: refreshToken } =
       this.authService.getCookieWithJwtRefreshToken(user.userId);
     await this.userService.setCurrentRefreshToken(refreshToken, user.userId);
+    request.res.setHeader('Content-Type', 'application/json');
     request.res.setHeader('Set-Cookie', [
       accessTokenCookie,
       refreshTokenCookie,
@@ -62,7 +71,10 @@ export class AuthController {
   async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
     await this.userService.removeRefreshToken(request.user.userId);
     response.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
-    return response.sendStatus(200);
+    return response.status(200).json({
+      statusCode: 200,
+      message: 'Logout successful',
+    });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -72,6 +84,7 @@ export class AuthController {
     const user = request.user;
     const { password, ...result } = user; // eslint-disable-line
     const userRes = { result };
+    request.res.setHeader('Content-Type', 'application/json');
     return JSON.stringify(userRes.result);
   }
 

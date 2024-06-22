@@ -12,7 +12,7 @@ import { Admin } from './Admin';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 
-enum UserRole {
+export enum UserRole {
   ADMIN = 'admin',
   APPLICANT = 'applicant',
 }
@@ -43,7 +43,7 @@ export class User {
     enum: UserRole,
     default: UserRole.APPLICANT,
   })
-  role: UserRole;
+  public role: UserRole;
 
   @Column({
     nullable: true,
