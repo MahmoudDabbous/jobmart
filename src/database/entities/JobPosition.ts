@@ -7,9 +7,6 @@ export class JobPosition {
   jobPositionId: number;
 
   @Column()
-  code: string;
-
-  @Column()
   name: string;
 
   @Column()

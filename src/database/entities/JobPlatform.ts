@@ -7,9 +7,6 @@ export class JobPlatform {
   jobPlatformId: number;
 
   @Column()
-  code: string;
-
-  @Column()
   name: string;
 
   @Column()

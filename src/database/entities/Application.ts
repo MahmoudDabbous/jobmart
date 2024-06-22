@@ -52,6 +52,7 @@ export class Application {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
   @OneToMany(
     () => ApplicationDocument,
     (applicationDocument) => applicationDocument.application,
