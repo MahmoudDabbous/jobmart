@@ -5,10 +5,8 @@ import {
   Delete,
   Body,
   Param,
-  Query,
   ParseIntPipe,
   Patch,
-  DefaultValuePipe,
   UseGuards,
 } from '@nestjs/common';
 import { Experience } from 'src/database/entities/Experience';
@@ -59,16 +57,9 @@ export class ExperiencesController {
   }
 
   @Get()
-  async findAll(
-    @Param('applicantId', ParseIntPipe) applicantId: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
-  ) {
-    return await this.experiencesService.findAll(applicantId, {
-      page,
-      limit,
-      route: `http://localhost:3000/applicants/${applicantId}/experiences`,
-    });
+  async findAll(@Param('applicantId', ParseIntPipe) applicantId: number) {
+    const applicant = await this.applicantService.findOne(applicantId);
+    return applicant.experiences;
   }
 
   @Get(':experienceId')

@@ -1,12 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  IPaginationOptions,
-  Pagination,
-  paginate,
-} from 'nestjs-typeorm-paginate';
-
 import { Applicant } from 'src/database/entities/Applicant';
 import { Education } from 'src/database/entities/Education';
 import { CreateEducationDto } from '../../dtos/education/create-education.dto';
@@ -62,15 +56,6 @@ export class EducationsService {
     if (!deleteResult.affected) {
       throw new NotFoundException(`Education with ID ${educationId} not found`);
     }
-  }
-
-  async findAll(
-    applicantId: number,
-    pagination: IPaginationOptions,
-  ): Promise<Pagination<Education>> {
-    const qb = this.educationRepository.createQueryBuilder('education');
-    qb.where('education.applicant.applicantId = :applicantId', { applicantId });
-    return paginate<Education>(qb, pagination);
   }
 
   async findOne(educationId: number): Promise<Education> {
