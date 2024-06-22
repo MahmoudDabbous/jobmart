@@ -1,4 +1,4 @@
-import { IsString, IsDate, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString } from 'class-validator';
 
 export class CreateEducationDto {
   @IsString()
@@ -13,11 +13,11 @@ export class CreateEducationDto {
   @IsNotEmpty()
   fieldOfStudy: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   startDate: Date;
 
-  @IsDate()
+  @IsDateString()
   endDate?: Date;
 
   @IsString()

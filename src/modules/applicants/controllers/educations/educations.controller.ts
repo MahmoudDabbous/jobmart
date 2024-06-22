@@ -15,11 +15,15 @@ import { EducationsService } from '../../services/educations/educations.service'
 import { CreateEducationDto } from '../../dtos/education/create-education.dto';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
 import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
+import { ApplicantsService } from '../../services/applicants/applicants.service';
 
 @Controller('applicants/:applicantId/educations')
 @UseGuards(JwtAuthGuard)
 export class EducationsController {
-  constructor(private readonly educationsService: EducationsService) {}
+  constructor(
+    private readonly educationsService: EducationsService,
+    private readonly applicantService: ApplicantsService,
+  ) {}
 
   @Get()
   async findAll(
@@ -44,7 +48,18 @@ export class EducationsController {
     @Param('applicantId', ParseIntPipe) applicantId: number,
     @Body() data: CreateEducationDto,
   ) {
-    return await this.educationsService.create(applicantId, data);
+    const applicant = await this.applicantService.findOne(applicantId);
+    const newEducation = await this.educationsService.create(
+      applicant.applicantId,
+      data,
+    );
+
+    delete newEducation.applicant;
+
+    return {
+      ...newEducation,
+      userId: applicant.user.userId,
+    };
   }
 
   @Patch(':educationId/update')
