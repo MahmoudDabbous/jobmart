@@ -34,10 +34,7 @@ export class IsOwnerOrAdminMiddleware implements NestMiddleware {
       return next();
     }
 
-    if (
-      user.role !== UserRole.APPLICANT &&
-      user.userId !== +req.params['applicantId']
-    ) {
+    if (user.userId !== +req.params['applicantId']) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 

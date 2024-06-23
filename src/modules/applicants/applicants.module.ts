@@ -38,6 +38,8 @@ import { ConfigService } from '@nestjs/config';
 })
 export class ApplicantsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(IsOwnerOrAdminMiddleware).forRoutes('applicants/*');
+    consumer
+      .apply(IsOwnerOrAdminMiddleware)
+      .forRoutes('applicants/:applicantId/*');
   }
 }
