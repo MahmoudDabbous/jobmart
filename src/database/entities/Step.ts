@@ -1,11 +1,11 @@
 import {
   Column,
   Entity,
-  ManyToMany,
+  // ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Test } from './Test';
+// import { Test } from './Test';
 import { ProcessStep } from './ProcessStep';
 
 @Entity({ name: 'steps' })
@@ -19,8 +19,8 @@ export class Step {
   @Column()
   name: string;
 
-  @ManyToMany(() => Test, (test) => test.steps)
-  tests: Test[];
+  // @ManyToMany(() => Test, (test) => test.steps)
+  // tests: Test[];
 
   @OneToMany(() => ProcessStep, (processStep) => processStep.step)
   processSteps: ProcessStep[];

@@ -1,7 +1,7 @@
 import { ApplicationTest } from './ApplicationTest';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Recruiter } from './Recruiter';
-import { Test } from './Test';
+// import { Test } from './Test';
 
 @Entity({ name: 'answers' })
 export class Answers {
@@ -32,6 +32,6 @@ export class Answers {
   @ManyToOne(() => Recruiter, (recruiter) => recruiter.answers)
   recruiter: Recruiter;
 
-  @ManyToOne(() => Test, (test) => test.answers)
-  test: Test;
+  // @ManyToOne(() => Test, (test) => test.answers)
+  // test: Test;
 }

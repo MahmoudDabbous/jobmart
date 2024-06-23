@@ -2,12 +2,12 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
+  // OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { JobCategory } from './JobCategory';
 import { JobPosition } from './JobPosition';
-import { Application } from './Application';
+// import { Application } from './Application';
 import { Organization } from './Organization';
 import { JobPlatform } from './JobPlatform';
 import { Process } from './Process';
@@ -59,8 +59,8 @@ export class Job {
   @ManyToOne(() => Organization, (organization) => organization.jobs)
   organization: Organization;
 
-  @OneToMany(() => Application, (application) => application.job)
-  applications: Application[];
+  // @OneToMany(() => Application, (application) => application.job)
+  // applications: Application[];
 
   @ManyToOne(() => Process, (process) => process.jobs)
   process: Process;

@@ -1,12 +1,12 @@
 import {
   Column,
   Entity,
-  ManyToOne,
+  // ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Application } from './Application';
-import { Test } from './Test';
+// import { Application } from './Application';
+// import { Test } from './Test';
 import { Answers } from './Answer';
 
 @Entity({ name: 'application_tests' })
@@ -26,11 +26,11 @@ export class ApplicationTest {
   @Column()
   endTime: Date;
 
-  @ManyToOne(() => Test, (test) => test.applicationTests)
-  test: Test;
+  // @ManyToOne(() => Test, (test) => test.applicationTests)
+  // test: Test;
 
-  @ManyToOne(() => Application, (application) => application.applicationTests)
-  application: Application;
+  // @ManyToOne(() => Application, (application) => application.applicationTests)
+  // application: Application;
 
   @OneToMany(() => Answers, (answers) => answers.applicationTest)
   answers: Answers[];
