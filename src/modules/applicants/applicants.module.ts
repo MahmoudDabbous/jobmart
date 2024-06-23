@@ -12,8 +12,18 @@ import { Experience } from 'src/database/entities/Experience';
 import { UsersService } from '../users/users.service';
 import { User } from 'src/database/entities/User';
 import { IsOwnerOrAdminMiddleware } from './middlewares/is-owner-or-admin.middleware';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 @Module({
-  imports: [TypeOrmModule.forFeature([Applicant, Education, Experience, User])],
+  imports: [
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forFeature([Applicant, Education, Experience, User]),
+  ],
   controllers: [
     ApplicantsController,
     EducationsController,
