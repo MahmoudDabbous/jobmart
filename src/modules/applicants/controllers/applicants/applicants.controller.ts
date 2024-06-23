@@ -8,14 +8,11 @@ import {
   ParseIntPipe,
   Patch,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { ApplicantsService } from '../../services/applicants/applicants.service';
 import { UpdateUserDto } from 'src/common/dto/update-user.dto';
-import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
 
 @Controller('applicants')
-@UseGuards(JwtAuthGuard)
 export class ApplicantsController {
   constructor(private readonly applicantsService: ApplicantsService) {}
 

@@ -9,16 +9,13 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { EducationsService } from '../../services/educations/educations.service';
 import { CreateEducationDto } from '../../dtos/education/create-education.dto';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
-import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
 import { ApplicantsService } from '../../services/applicants/applicants.service';
 
 @Controller('applicants/:applicantId/educations')
-@UseGuards(JwtAuthGuard)
 export class EducationsController {
   constructor(
     private readonly educationsService: EducationsService,
