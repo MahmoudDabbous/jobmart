@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ApplicantsController } from './controllers/applicants/applicants.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Applicant } from 'src/database/entities/Applicant';
@@ -11,6 +11,7 @@ import { Education } from 'src/database/entities/Education';
 import { Experience } from 'src/database/entities/Experience';
 import { UsersService } from '../users/users.service';
 import { User } from 'src/database/entities/User';
+import { IsOwnerOrAdminMiddleware } from './middlewares/is-owner-or-admin.middleware';
 @Module({
   imports: [TypeOrmModule.forFeature([Applicant, Education, Experience, User])],
   controllers: [
@@ -25,4 +26,8 @@ import { User } from 'src/database/entities/User';
     UsersService,
   ],
 })
-export class ApplicantsModule {}
+export class ApplicantsModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(IsOwnerOrAdminMiddleware).forRoutes('applicants/*');
+  }
+}
