@@ -43,7 +43,7 @@ export class EducationsController {
     return await this.educationsService.findOne(educationId);
   }
 
-  @Post('create')
+  @Post()
   async create(
     @Param('applicantId', ParseIntPipe) applicantId: number,
     @Body() data: CreateEducationDto,
@@ -62,7 +62,7 @@ export class EducationsController {
     };
   }
 
-  @Patch(':educationId/update')
+  @Patch(':educationId')
   async update(
     @Param('educationId', ParseIntPipe) educationId: number,
     @Body() data: UpdateEducationDto,
@@ -70,7 +70,7 @@ export class EducationsController {
     return await this.educationsService.update(educationId, data);
   }
 
-  @Delete(':educationId/delete')
+  @Delete(':educationId')
   async delete(@Param('educationId', ParseIntPipe) educationId: number) {
     return await this.educationsService.delete(educationId);
   }
