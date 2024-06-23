@@ -1,22 +1,18 @@
 import {
-  Column,
   Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
-import { ApplicationTest } from './ApplicationTest';
-import { Step } from './Step';
-import { Answers } from './Answer';
+import { Question } from './Question';
+import { Application } from './Application';
 
-@Entity({ name: 'tests' })
+@Entity()
 export class Test {
   @PrimaryGeneratedColumn()
   testId: number;
-
-  @Column()
-  code: string;
 
   @Column()
   duration: number;
@@ -24,23 +20,20 @@ export class Test {
   @Column()
   maxScore: number;
 
-  @OneToMany(() => ApplicationTest, (applicationTest) => applicationTest.test)
-  applicationTests: ApplicationTest[];
-
-  @ManyToMany(() => Step, (step) => step.tests)
+  @ManyToMany(() => Question, (question) => question.tests)
   @JoinTable({
-    name: 'test_steps',
+    name: 'test_questions',
     joinColumn: {
-      name: 'testId',
+      name: 'test',
       referencedColumnName: 'testId',
     },
     inverseJoinColumn: {
-      name: 'stepId',
-      referencedColumnName: 'stepId',
+      name: 'question',
+      referencedColumnName: 'questionId',
     },
   })
-  steps: Step[];
+  questions: Question[];
 
-  @OneToMany(() => Answers, (answers) => answers.test)
-  answers: Answers[];
+  @OneToMany(() => Application, (application) => application.test)
+  applications: Application[];
 }
