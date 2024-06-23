@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { JobsService } from '../../services/jobs/jobs.service';
 import { CreateJobDto } from '../../dto/jobs/create-job.dto';
 import { UpdateJobDto } from '../../dto/jobs/update-job.dto';
@@ -18,17 +27,20 @@ export class JobsController {
   }
 
   @Get(':jobId')
-  async findOne(jobId: number) {
+  async findOne(@Param('jobId', ParseIntPipe) jobId: number) {
     return await this.jobsService.findOne(jobId);
   }
 
   @Patch(':jobId')
-  async update(@Body() updateJobDto: UpdateJobDto, jobId: number) {
+  async update(
+    @Body() updateJobDto: UpdateJobDto,
+    @Param('jobId', ParseIntPipe) jobId: number,
+  ) {
     return await this.jobsService.update(jobId, updateJobDto);
   }
 
   @Delete(':jobId')
-  async remove(jobId: number) {
+  async remove(@Param('jobId', ParseIntPipe) jobId: number) {
     return await this.jobsService.delete(jobId);
   }
 }

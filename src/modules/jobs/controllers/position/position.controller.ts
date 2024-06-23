@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { PositionService } from '../../services/position/position.service';
 import { CreatePositionDto } from '../../dto/position/create-position.dto';
 import { UpdatePositionDto } from '../../dto/position/update-position.dto';
@@ -13,12 +22,12 @@ export class PositionController {
   }
 
   @Get(':positionId')
-  async findOne(positionId: number) {
+  async findOne(@Param('positionId', ParseIntPipe) positionId: number) {
     return await this.positionService.findOne(positionId);
   }
 
   @Get(':positionId/jobs')
-  async findJobs(positionId: number) {
+  async findJobs(@Param('positionId', ParseIntPipe) positionId: number) {
     return await this.positionService.findJobs(positionId);
   }
 
@@ -29,14 +38,14 @@ export class PositionController {
 
   @Patch(':positionId')
   async update(
-    positionId: number,
+    @Param('positionId', ParseIntPipe) positionId: number,
     @Body() updatePositionDto: UpdatePositionDto,
   ) {
     return await this.positionService.update(positionId, updatePositionDto);
   }
 
   @Delete(':positionId')
-  async remove(positionId: number) {
+  async remove(@Param('positionId', ParseIntPipe) positionId: number) {
     return await this.positionService.delete(positionId);
   }
 }

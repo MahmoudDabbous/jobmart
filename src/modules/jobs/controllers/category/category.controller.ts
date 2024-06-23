@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CategoryService } from '../../services/category/category.service';
 import { CreateJobDto } from '../../dto/jobs/create-job.dto';
 import { UpdateCategoryDto } from '../../dto/category/update-categort.dto';
@@ -18,25 +27,25 @@ export class CategoryController {
   }
 
   @Get(':categoryId')
-  async findOne(categoryId: number) {
+  async findOne(@Param('categoryId', ParseIntPipe) categoryId: number) {
     return await this.categoryService.findOne(categoryId);
   }
 
   @Patch(':categoryId')
   async update(
     @Body() updateCategoryDto: UpdateCategoryDto,
-    categoryId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
   ) {
     return await this.categoryService.update(categoryId, updateCategoryDto);
   }
 
   @Delete(':categoryId')
-  async remove(categoryId: number) {
+  async remove(@Param('categoryId', ParseIntPipe) categoryId: number) {
     return await this.categoryService.delete(categoryId);
   }
 
   @Get(':categoryId/jobs')
-  async findJobs(categoryId: number) {
+  async findJobs(@Param('categoryId', ParseIntPipe) categoryId: number) {
     return await this.categoryService.findJobs(categoryId);
   }
 }

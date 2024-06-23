@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Patch, Delete, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { PlatformService } from '../../services/platform/platform.service';
 import { UpdatePlatformDto } from '../../dto/platform/update-platform.dto';
 import { CreatePlatformDto } from '../../dto/platform/create-platform.dto';
@@ -13,7 +22,7 @@ export class PlatformController {
   }
 
   @Get(':platformId')
-  async findOne(platformId: number) {
+  async findOne(@Param('platformId', ParseIntPipe) platformId: number) {
     return await this.platformService.findOne(platformId);
   }
 
@@ -24,19 +33,19 @@ export class PlatformController {
 
   @Patch(':platformId')
   async update(
-    platformId: number,
+    @Param('platformId', ParseIntPipe) platformId: number,
     @Body() updatePlatformDto: UpdatePlatformDto,
   ) {
     return await this.platformService.update(platformId, updatePlatformDto);
   }
 
   @Delete(':platformId')
-  async remove(platformId: number) {
+  async remove(@Param('platformId', ParseIntPipe) platformId: number) {
     return await this.platformService.delete(platformId);
   }
 
   @Get(':platformId/jobs')
-  async findJobs(platformId: number) {
+  async findJobs(@Param('platformId', ParseIntPipe) platformId: number) {
     return await this.platformService.findJobs(platformId);
   }
 }
