@@ -1,14 +1,12 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Delete,
   Get,
   Param,
   ParseIntPipe,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
 import { EducationsService } from '../../services/educations/educations.service';
 import { CreateEducationDto } from '../../dtos/education/create-education.dto';
@@ -23,16 +21,9 @@ export class EducationsController {
   ) {}
 
   @Get()
-  async findAll(
-    @Param('applicantId', ParseIntPipe) applicantId: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ) {
-    return await this.educationsService.findAll(applicantId, {
-      page,
-      limit,
-      route: `http://localhost:3000/applicants/${applicantId}/educations`,
-    });
+  async findAll(@Param('applicantId', ParseIntPipe) applicantId: number) {
+    const applicant = await this.applicantService.findOne(applicantId);
+    return applicant.educations;
   }
 
   @Get(':educationId')

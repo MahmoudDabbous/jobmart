@@ -7,6 +7,9 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { JobsModule } from './modules/jobs/jobs.module';
+import { TestModule } from './modules/test/test.module';
+import { QuestionModule } from './modules/question/question.module';
+import { GradinginfoModule } from './modules/gradinginfo/gradinginfo.module';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { JobsModule } from './modules/jobs/jobs.module';
     UsersModule,
     AuthModule,
     JobsModule,
+    TestModule,
+    QuestionModule,
+    GradinginfoModule,
   ],
 })
 export class AppModule implements NestModule {

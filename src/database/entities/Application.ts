@@ -1,82 +1,29 @@
 import {
-  Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
+  Column,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
-import { Applicant } from './Applicant';
-import { Job } from './Job';
-import { ApplicationDocument } from './ApplicationDocument';
-import { ApplicationTest } from './ApplicationTest';
-import { ApplicationEvaluation } from './ApplicationEvaluation';
-import { Interview } from './Interview';
-import { ApplicationStatusChange } from './ApplicationStatusChange';
+import { Test } from './Test';
+import { GradingInfo } from './GradingInfo';
 
-@Entity({ name: 'applications' })
+@Entity()
 export class Application {
   @PrimaryGeneratedColumn()
   applicationId: number;
 
   @Column()
-  applicantId: number;
+  startTime: Date;
 
   @Column()
-  jobId: number;
+  endTime: Date;
 
-  @Column()
-  dateOfApplication: Date;
+  @ManyToOne(() => Test, (test) => test.applications)
+  test: Test;
 
-  @Column()
-  education: string;
-
-  @Column()
-  experience: string;
-
-  @Column()
-  otherInfo: string;
-
-  @ManyToOne(() => Applicant, (applicant) => applicant.applications)
+  @OneToOne(() => GradingInfo, (gradingInfo) => gradingInfo.application)
   @JoinColumn()
-  applicant: Applicant;
-
-  @ManyToOne(() => Job, (job) => job.applications)
-  @JoinColumn()
-  job: Job;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @OneToMany(
-    () => ApplicationDocument,
-    (applicationDocument) => applicationDocument.application,
-  )
-  applicationDocuments: ApplicationDocument[];
-
-  @OneToMany(
-    () => ApplicationTest,
-    (applicationTest) => applicationTest.application,
-  )
-  applicationTests: ApplicationTest[];
-
-  @OneToMany(
-    () => ApplicationStatusChange,
-    (applicationStatusChange) => applicationStatusChange.application,
-  )
-  applicationStatusChanges: ApplicationStatusChange[];
-
-  @OneToMany(() => Interview, (interview) => interview.application)
-  interviews: Interview[];
-
-  @OneToMany(
-    () => ApplicationEvaluation,
-    (applicationEvaluation) => applicationEvaluation.application,
-  )
-  applicationEvaluations: ApplicationEvaluation[];
+  gradingInfo: GradingInfo;
 }

@@ -10,7 +10,7 @@ import {
 import { Education } from './Education';
 import { Experience } from './Experience';
 import { User } from './User';
-import { Application } from './Application';
+// import { Application } from './Application';
 import { ApplicationDocument } from './ApplicationDocument';
 
 @Entity({ name: 'applicants' })
@@ -28,8 +28,8 @@ export class Applicant {
   @OneToMany(() => Experience, (experience) => experience.applicant)
   experiences: Experience[];
 
-  @OneToMany(() => Application, (application) => application.applicant)
-  applications: Application[];
+  // @OneToMany(() => Application, (application) => application.applicant)
+  // applications: Application[];
 
   @CreateDateColumn()
   createdAt: Date;

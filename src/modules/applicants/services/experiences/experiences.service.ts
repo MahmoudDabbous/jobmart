@@ -1,8 +1,3 @@
-import {
-  Pagination,
-  IPaginationOptions,
-  paginate,
-} from 'nestjs-typeorm-paginate';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -66,15 +61,6 @@ export class ExperiencesService {
         `Experience with ID ${experienceId} not found`,
       );
     }
-  }
-
-  async findAll(
-    applicantId: number,
-    pagination: IPaginationOptions,
-  ): Promise<Pagination<Experience>> {
-    const qb = this.experienceRepository.createQueryBuilder('education');
-    qb.where('education.applicant.applicantId = :applicantId', { applicantId });
-    return paginate<Experience>(qb, pagination);
   }
 
   async findOne(experienceId: number): Promise<Experience> {
