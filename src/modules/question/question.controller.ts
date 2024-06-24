@@ -43,9 +43,4 @@ export class QuestionController {
   remove(@Param('id') id: string) {
     return this.questionService.remove(+id);
   }
-
-  @Get(':id/tests')
-  getQuestionTests(@Param('id') id: string) {
-    return this.questionService.getQuestionTests(+id);
-  }
 }

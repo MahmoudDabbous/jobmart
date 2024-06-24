@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Test } from './Test';
 
 enum QuestionType {
@@ -26,6 +26,6 @@ export class Question {
   @Column()
   correctAnswer: string;
 
-  @ManyToMany(() => Test, (test) => test.questions)
-  tests: Test[];
+  @ManyToOne(() => Test, (test) => test.questions)
+  test: Test;
 }

@@ -1,4 +1,10 @@
-import { IsString, IsEnum, IsArray, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsEnum,
+} from 'class-validator';
 
 enum QuestionType {
   MCQ = 'MCQ',
@@ -20,4 +26,7 @@ export class CreateQuestionDto {
   @IsString()
   @IsNotEmpty()
   correctAnswer: string;
+
+  @IsNumber()
+  testId: number;
 }
