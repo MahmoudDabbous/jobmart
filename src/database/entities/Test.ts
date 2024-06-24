@@ -1,11 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-  OneToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Question } from './Question';
 import { Application } from './Application';
 
@@ -15,23 +8,15 @@ export class Test {
   testId: number;
 
   @Column()
+  testCode: string;
+
+  @Column()
   duration: number;
 
   @Column()
   maxScore: number;
 
-  @ManyToMany(() => Question, (question) => question.tests)
-  @JoinTable({
-    name: 'test_questions',
-    joinColumn: {
-      name: 'test',
-      referencedColumnName: 'testId',
-    },
-    inverseJoinColumn: {
-      name: 'question',
-      referencedColumnName: 'questionId',
-    },
-  })
+  @OneToMany(() => Question, (question) => question.test)
   questions: Question[];
 
   @OneToMany(() => Application, (application) => application.test)

@@ -1,35 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Test } from 'src/database/entities/Test';
 import { Repository } from 'typeorm';
 import { CreateTestDto } from './dtos/create-test.dto';
 import { UpdateTestDto } from './dtos/update-test.dto';
-import { Question } from 'src/database/entities/Question';
 import { Pagination, paginate } from 'nestjs-typeorm-paginate';
+import { Test } from 'src/database/entities/Test';
 
 @Injectable()
 export class TestService {
   constructor(
     @InjectRepository(Test)
     private testRepository: Repository<Test>,
-    @InjectRepository(Question)
-    private questionRepository: Repository<Question>,
   ) {}
 
   async create(createTestDto: CreateTestDto): Promise<Test> {
-    console.log('1', createTestDto);
-    const { questionIds, ...testData } = createTestDto;
-    console.log('2', questionIds + ' ' + testData);
-    // Create the test entity
-    const test = this.testRepository.create(testData);
-    console.log('3', test);
-    // Find all questions by their ids
-    const questions = await this.questionRepository.findByIds(questionIds);
-    console.log('4', questions);
-    // Assign questions to the test
-    test.questions = questions;
-    console.log('5', test);
-    // Save the test with its questions
+    const test = this.testRepository.create(createTestDto);
     return await this.testRepository.save(test);
   }
 
@@ -70,16 +55,5 @@ export class TestService {
       throw new NotFoundException(`Test with ID ${id} not found`);
     }
     return test.questions;
-  }
-
-  async getTestApplications(id: number) {
-    const test = await this.testRepository.findOne({
-      where: { testId: id },
-      relations: ['applications'],
-    });
-    if (!test) {
-      throw new NotFoundException(`Test with ID ${id} not found`);
-    }
-    return test.applications;
   }
 }

@@ -18,7 +18,6 @@ export class TestController {
 
   @Post()
   create(@Body() createTestDto: CreateTestDto) {
-    console.log('inside create test controller', createTestDto);
     return this.testService.create(createTestDto);
   }
 
@@ -45,10 +44,5 @@ export class TestController {
   @Get(':id/questions')
   getTestQuestions(@Param('id') id: string) {
     return this.testService.getTestQuestions(+id);
-  }
-
-  @Get(':id/applications') // still need work on application
-  getTestApplications(@Param('id') id: string) {
-    return this.testService.getTestApplications(+id);
   }
 }
