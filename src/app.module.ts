@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TestModule } from './modules/test/test.module';
 import { QuestionModule } from './modules/question/question.module';
+import { GradinginfoModule } from './modules/gradinginfo/gradinginfo.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { QuestionModule } from './modules/question/question.module';
     AuthModule,
     TestModule,
     QuestionModule,
+    GradinginfoModule,
   ],
 })
 export class AppModule implements NestModule {
