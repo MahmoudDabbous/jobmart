@@ -6,6 +6,7 @@ import { ApplicantsModule } from './modules/applicants/applicants.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { TestModule } from './modules/test/test.module';
 import { QuestionModule } from './modules/question/question.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { QuestionModule } from './modules/question/question.module';
     ApplicantsModule,
     UsersModule,
     AuthModule,
+    TestModule,
     QuestionModule,
   ],
 })
