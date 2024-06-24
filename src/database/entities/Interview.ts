@@ -1,11 +1,11 @@
 import {
   Column,
   Entity,
-  ManyToOne,
+  // ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Application } from './Application';
+// import { Application } from './Application';
 import { InterviewNote } from './InterviewNote';
 
 @Entity({ name: 'interviews' })
@@ -22,8 +22,8 @@ export class Interview {
   @Column()
   applicationId: number;
 
-  @ManyToOne(() => Application, (application) => application.interviews)
-  application: Application;
+  // @ManyToOne(() => Application, (application) => application.interviews)
+  // application: Application;
 
   @OneToMany(() => InterviewNote, (interviewNote) => interviewNote.interview)
   interviewNotes: InterviewNote[];

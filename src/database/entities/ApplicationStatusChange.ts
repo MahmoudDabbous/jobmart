@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationStatus } from './ApplicationStatus';
-import { Application } from './Application';
+// import { Application } from './Application';
 
 @Entity({ name: 'application_status_changes' })
 export class ApplicationStatusChange {
@@ -22,9 +22,9 @@ export class ApplicationStatusChange {
   )
   applicationStatus: ApplicationStatus;
 
-  @ManyToOne(
-    () => Application,
-    (application) => application.applicationStatusChanges,
-  )
-  application: Application;
+  // @ManyToOne(
+  //   () => Application,
+  //   (application) => application.applicationStatusChanges,
+  // )
+  // application: Application;
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from './Application';
+// import { Application } from './Application';
 import { Applicant } from './Applicant';
 import { Document } from './Document';
 
@@ -17,11 +17,11 @@ export class ApplicationDocument {
   @Column()
   applicantId: number;
 
-  @ManyToOne(
-    () => Application,
-    (application) => application.applicationDocuments,
-  )
-  application: Application;
+  // @ManyToOne(
+  //   () => Application,
+  //   (application) => application.applicationDocuments,
+  // )
+  // application: Application;
 
   @ManyToOne(() => Document, (document) => document.applicationDocuments)
   document: Document;

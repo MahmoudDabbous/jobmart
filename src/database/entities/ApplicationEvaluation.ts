@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from './Application';
+// import { Application } from './Application';
 import { Recruiter } from './Recruiter';
 
 @Entity({ name: 'application_evaluations' })
@@ -22,9 +22,9 @@ export class ApplicationEvaluation {
   @ManyToOne(() => Recruiter, (recruiter) => recruiter.applicationEvaluations)
   recruiter: Recruiter;
 
-  @ManyToOne(
-    () => Application,
-    (application) => application.applicationEvaluations,
-  )
-  application: Application;
+  // @ManyToOne(
+  //   () => Application,
+  //   (application) => application.applicationEvaluations,
+  // )
+  // application: Application;
 }
