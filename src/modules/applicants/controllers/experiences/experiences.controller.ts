@@ -7,17 +7,14 @@ import {
   Param,
   ParseIntPipe,
   Patch,
-  UseGuards,
 } from '@nestjs/common';
 import { Experience } from 'src/database/entities/Experience';
 import { ExperiencesService } from '../../services/experiences/experiences.service';
 import { CreateExperienceDto } from '../../dtos/experience/create-experience.dto';
 import { UpdateExperienceDto } from '../../dtos/experience/update-experience.dto';
-import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
 import { ApplicantsService } from '../../services/applicants/applicants.service';
 
 @Controller('applicants/:applicantId/experiences')
-@UseGuards(JwtAuthGuard)
 export class ExperiencesController {
   constructor(
     private readonly experiencesService: ExperiencesService,

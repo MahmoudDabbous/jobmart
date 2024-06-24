@@ -8,7 +8,6 @@ import {
 import { JobCategory } from './JobCategory';
 import { JobPosition } from './JobPosition';
 // import { Application } from './Application';
-import { Organization } from './Organization';
 import { JobPlatform } from './JobPlatform';
 import { Process } from './Process';
 
@@ -18,34 +17,16 @@ export class Job {
   jobId: number;
 
   @Column()
-  code: string;
-
-  @Column()
   name: string;
 
   @Column()
   description: string;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   jobStartDate: Date;
 
-  @Column()
+  @Column({ default: 1 })
   numberOfVacancies: number;
-
-  @Column()
-  jobCategoryId: number;
-
-  @Column()
-  jobPositionId: number;
-
-  @Column()
-  jobPlatformId: number;
-
-  @Column()
-  organizationId: number;
-
-  @Column()
-  processId: number;
 
   @ManyToOne(() => JobCategory, (jobCategory) => jobCategory.jobs)
   jobCategory: JobCategory;
@@ -55,9 +36,6 @@ export class Job {
 
   @ManyToOne(() => JobPlatform, (jobPlatform) => jobPlatform.jobs)
   jobPlatform: JobPlatform;
-
-  @ManyToOne(() => Organization, (organization) => organization.jobs)
-  organization: Organization;
 
   // @OneToMany(() => Application, (application) => application.job)
   // applications: Application[];

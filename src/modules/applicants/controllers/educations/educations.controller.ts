@@ -7,16 +7,13 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { EducationsService } from '../../services/educations/educations.service';
 import { CreateEducationDto } from '../../dtos/education/create-education.dto';
 import { UpdateEducationDto } from '../../dtos/education/update-education.dto';
-import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
 import { ApplicantsService } from '../../services/applicants/applicants.service';
 
 @Controller('applicants/:applicantId/educations')
-@UseGuards(JwtAuthGuard)
 export class EducationsController {
   constructor(
     private readonly educationsService: EducationsService,
@@ -34,7 +31,7 @@ export class EducationsController {
     return await this.educationsService.findOne(educationId);
   }
 
-  @Post('create')
+  @Post()
   async create(
     @Param('applicantId', ParseIntPipe) applicantId: number,
     @Body() data: CreateEducationDto,
@@ -53,7 +50,7 @@ export class EducationsController {
     };
   }
 
-  @Patch(':educationId/update')
+  @Patch(':educationId')
   async update(
     @Param('educationId', ParseIntPipe) educationId: number,
     @Body() data: UpdateEducationDto,
@@ -61,7 +58,7 @@ export class EducationsController {
     return await this.educationsService.update(educationId, data);
   }
 
-  @Delete(':educationId/delete')
+  @Delete(':educationId')
   async delete(@Param('educationId', ParseIntPipe) educationId: number) {
     return await this.educationsService.delete(educationId);
   }
