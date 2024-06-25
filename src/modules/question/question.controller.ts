@@ -7,12 +7,15 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { CreateQuestionDto } from './dtos/create-question.dto';
 import { UpdateQuestionDto } from './dtos/update-question.dto';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('questions')
+@UseGuards(AdminGuard)
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
 
