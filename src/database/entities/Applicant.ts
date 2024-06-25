@@ -12,6 +12,7 @@ import { Experience } from './Experience';
 import { User } from './User';
 // import { Application } from './Application';
 import { ApplicationDocument } from './ApplicationDocument';
+import { Application } from './Application';
 
 @Entity({ name: 'applicants' })
 export class Applicant {
@@ -42,4 +43,7 @@ export class Applicant {
     (applicationDocument) => applicationDocument.applicant,
   )
   applicationDocuments: ApplicationDocument[];
+
+  @OneToMany(() => Application, (application) => application.applicant)
+  applications: Application[];
 }

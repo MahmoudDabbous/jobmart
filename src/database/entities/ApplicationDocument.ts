@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 // import { Application } from './Application';
 import { Applicant } from './Applicant';
-import { Document } from './Document';
+// import { Document } from './Document';
 
 @Entity({ name: 'application_documents' })
 export class ApplicationDocument {
@@ -23,8 +23,8 @@ export class ApplicationDocument {
   // )
   // application: Application;
 
-  @ManyToOne(() => Document, (document) => document.applicationDocuments)
-  document: Document;
+  // @ManyToOne(() => Document, (document) => document.applicationDocuments)
+  // document: Document;
 
   @ManyToOne(() => Applicant, (applicant) => applicant.applicationDocuments)
   applicant: Applicant;
