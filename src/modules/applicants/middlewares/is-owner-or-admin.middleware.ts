@@ -31,16 +31,12 @@ export class IsOwnerOrAdminMiddleware implements NestMiddleware {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.role === UserRole.ADMIN) {
-      return next();
-    }
-
-    if (+req.params.applicantId === user.userId) {
-      return next();
-    }
-
-    if (req.baseUrl.match('/me')) {
+    if (req.baseUrl.match('/me') && user.role === UserRole.APPLICANT) {
       req.user = user;
+      return next();
+    }
+
+    if (user.role === UserRole.ADMIN) {
       return next();
     }
 
