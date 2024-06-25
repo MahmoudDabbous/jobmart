@@ -3,10 +3,12 @@ import {
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from 'src/database/entities/User';
 import { UsersService } from 'src/modules/users/users.service';
+import RequestWithUser from 'src/modules/auth/interfaces/requestWithUser.interface';
+import TokenPayload from 'src/modules/auth/interfaces/tokenPayload.interface';
 
 @Injectable()
 export class IsOwnerOrAdminMiddleware implements NestMiddleware {
@@ -15,29 +17,34 @@ export class IsOwnerOrAdminMiddleware implements NestMiddleware {
     private readonly usersService: UsersService,
   ) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
-    const authHeader = req.cookies.Authentication;
+  async use(req: RequestWithUser, res: Response, next: NextFunction) {
+    const token = req.cookies.Authentication;
 
-    if (!authHeader) {
-      return res.status(401).json({ message: 'Unauthorized' });
+    if (!token) {
+      throw new UnauthorizedException('Unauthorized');
     }
+    const decoded = this.jwtService.verify(token) as TokenPayload;
 
-    const decoded = this.jwtService.decode(authHeader) as { userId: string };
+    const user = await this.usersService.getById(decoded.userId);
 
-    if (!decoded || !decoded.userId) {
-      throw new UnauthorizedException('Invalid token');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
-
-    const user = await this.usersService.getById(+decoded.userId);
 
     if (user.role === UserRole.ADMIN) {
       return next();
     }
 
-    if (user.userId !== +req.params['applicantId']) {
-      return res.status(403).json({ message: 'Forbidden' });
+    if (+req.params.applicantId === user.userId) {
+      req.user = user;
+      return next();
     }
 
-    return next();
+    if (req.baseUrl.match('/me')) {
+      req.user = user;
+      return next();
+    }
+
+    throw new UnauthorizedException('Unauthorized');
   }
 }
