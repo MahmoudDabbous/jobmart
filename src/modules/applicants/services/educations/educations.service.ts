@@ -31,6 +31,7 @@ export class EducationsService {
 
         const education = this.educationRepository.create(data);
         education.applicant = applicant;
+        this.educationRepository.save(education);
         return education;
       },
     );
@@ -66,5 +67,11 @@ export class EducationsService {
       throw new NotFoundException(`Education with ID ${educationId} not found`);
     }
     return education;
+  }
+
+  async findAll(applicantId: number): Promise<Education[]> {
+    return await this.educationRepository.find({
+      where: { applicant: { applicantId } },
+    });
   }
 }

@@ -31,6 +31,7 @@ export class ExperiencesService {
 
         const experience = this.experienceRepository.create(data);
         experience.applicant = applicant;
+        this.experienceRepository.save(experience);
         return experience;
       },
     );
@@ -73,5 +74,11 @@ export class ExperiencesService {
       );
     }
     return experience;
+  }
+
+  async findAll(applicantId: number): Promise<Experience[]> {
+    return await this.experienceRepository.find({
+      where: { applicant: { applicantId } },
+    });
   }
 }
