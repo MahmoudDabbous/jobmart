@@ -36,7 +36,7 @@ export class IsOwnerOrAdminMiddleware implements NestMiddleware {
       return next();
     }
 
-    if (user.role === UserRole.ADMIN) {
+    if (user.role === UserRole.ADMIN && !req.baseUrl.match('/me')) {
       return next();
     }
 
