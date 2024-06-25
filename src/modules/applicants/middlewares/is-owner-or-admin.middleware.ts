@@ -36,7 +36,6 @@ export class IsOwnerOrAdminMiddleware implements NestMiddleware {
     }
 
     if (+req.params.applicantId === user.userId) {
-      req.user = user;
       return next();
     }
 
