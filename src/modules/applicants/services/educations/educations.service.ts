@@ -17,7 +17,7 @@ export class EducationsService {
     applicantId: number,
     data: CreateEducationDto,
   ): Promise<Education> {
-    const applicant = await this.educationRepository.manager.transaction(
+    const newEducation = await this.educationRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const applicant = await transactionalEntityManager.findOne(Applicant, {
           where: { applicantId },
@@ -35,7 +35,7 @@ export class EducationsService {
         return education;
       },
     );
-    return await this.educationRepository.save(applicant);
+    return newEducation;
   }
 
   async update(

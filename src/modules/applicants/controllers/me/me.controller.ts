@@ -32,7 +32,6 @@ export class MeController {
     @Req()
     req: RequestWithUser,
   ) {
-    console.log(req.user);
     return await this.applicantsService.findOne(req.user.userId);
   }
 

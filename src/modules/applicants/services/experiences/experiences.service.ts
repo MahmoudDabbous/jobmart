@@ -36,7 +36,7 @@ export class ExperiencesService {
       },
     );
 
-    return await this.experienceRepository.save(newExperience);
+    return newExperience;
   }
 
   async update(
