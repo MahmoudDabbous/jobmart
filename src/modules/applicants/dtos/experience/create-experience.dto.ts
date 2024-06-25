@@ -6,23 +6,27 @@ import {
 } from 'class-validator';
 
 export class CreateExperienceDto {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
   company: string;
 
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty()
-  position: string;
+  location: string;
 
-  @IsDateString()
   @IsNotEmpty()
+  @IsDateString()
   startDate: Date;
 
-  @IsDateString()
   @IsOptional()
+  @IsDateString()
   endDate?: Date;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  description: string;
+  description?: string;
 }

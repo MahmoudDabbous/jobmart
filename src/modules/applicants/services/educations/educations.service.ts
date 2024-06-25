@@ -17,7 +17,7 @@ export class EducationsService {
     applicantId: number,
     data: CreateEducationDto,
   ): Promise<Education> {
-    const applicant = await this.educationRepository.manager.transaction(
+    const newEducation = await this.educationRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const applicant = await transactionalEntityManager.findOne(Applicant, {
           where: { applicantId },
@@ -31,10 +31,11 @@ export class EducationsService {
 
         const education = this.educationRepository.create(data);
         education.applicant = applicant;
+        this.educationRepository.save(education);
         return education;
       },
     );
-    return await this.educationRepository.save(applicant);
+    return newEducation;
   }
 
   async update(
@@ -66,5 +67,11 @@ export class EducationsService {
       throw new NotFoundException(`Education with ID ${educationId} not found`);
     }
     return education;
+  }
+
+  async findAll(applicantId: number): Promise<Education[]> {
+    return await this.educationRepository.find({
+      where: { applicant: { applicantId } },
+    });
   }
 }
