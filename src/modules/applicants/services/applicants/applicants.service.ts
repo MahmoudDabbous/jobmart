@@ -27,6 +27,7 @@ export class ApplicantsService {
     qb.leftJoinAndSelect('applicant.user', 'user');
     qb.leftJoinAndSelect('applicant.experiences', 'experiences');
     qb.leftJoinAndSelect('applicant.educations', 'educations');
+    qb.leftJoinAndSelect('applicant.applications', 'applications');
     qb.select([
       'applicant',
       'user.userId',
@@ -36,6 +37,7 @@ export class ApplicantsService {
       'user.phone',
       'experiences',
       'educations',
+      'applications',
     ]);
     return paginate<Applicant>(qb, pagination);
   }
@@ -45,6 +47,7 @@ export class ApplicantsService {
     qb.leftJoinAndSelect('applicant.user', 'user');
     qb.leftJoinAndSelect('applicant.experiences', 'experiences');
     qb.leftJoinAndSelect('applicant.educations', 'educations');
+    qb.leftJoinAndSelect('applicant.applications', 'applications');
     qb.select([
       'applicant',
       'user.userId',
@@ -54,6 +57,7 @@ export class ApplicantsService {
       'user.phone',
       'experiences',
       'educations',
+      'applications',
     ]);
     qb.where('user.userId = :userId', { userId: applicantId });
     const applicant = await qb.getOne();

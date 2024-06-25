@@ -37,6 +37,7 @@ import { MeController } from './controllers/me/me.controller';
     ExperiencesService,
     UsersService,
   ],
+  exports: [ApplicantsService],
 })
 export class ApplicantsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
