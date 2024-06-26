@@ -9,9 +9,10 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
   const frontendUrl = process.env.FRONTEND_URL;
-  if (frontendUrl) {
+  const adminDashboardUrl = process.env.ADMIN_DASHBOARD_URL;
+  if (frontendUrl || adminDashboardUrl) {
     app.enableCors({
-      origin: frontendUrl,
+      origin: [frontendUrl, adminDashboardUrl],
       credentials: true,
     });
   }

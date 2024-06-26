@@ -18,19 +18,16 @@ export class AuthService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async signUp(signUpData: CreateUserDto) {
-    const user = await this.usersService.isEmailTaken(signUpData.email);
-    if (user) {
-      throw new HttpException(
-        'User with that email or phone already exists',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  async signUp(signUpData: CreateUserDto): Promise<User> {
     try {
+      await this.usersService.validateUniqueFields(signUpData);
       const createdUser = await this.usersService.create(signUpData);
       this.eventEmitter.emit(USER_CREATED, { userId: createdUser.userId });
       return createdUser;
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
         'Something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
