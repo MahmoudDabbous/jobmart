@@ -1,12 +1,13 @@
 import {
   Column,
   Entity,
-  OneToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Application } from './Application';
-// import { ApplicationDocument } from './ApplicationDocument';
+import { Applicant } from './Applicant';
 
 @Entity({ name: 'documents' })
 export class Document {
@@ -19,15 +20,19 @@ export class Document {
   @Column()
   url: string;
 
+  @Column()
+  extension: string;
+
+  @Column()
+  size: number;
+
   @UpdateDateColumn()
   lastUpdated: Date;
 
-  // @OneToMany(
-  //   () => ApplicationDocument,
-  //   (applicationDocument) => applicationDocument.document,
-  // )
-  // applicationDocuments: ApplicationDocument[];
+  @ManyToOne(() => Application, (application) => application.document)
+  @JoinColumn()
+  application: Application;
 
-  @OneToMany(() => Application, (application) => application.document)
-  applications: Application[];
+  @ManyToOne(() => Applicant, (applicant) => applicant.documents)
+  applicant: Applicant;
 }

@@ -6,13 +6,13 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 import { Education } from './Education';
 import { Experience } from './Experience';
 import { User } from './User';
-// import { Application } from './Application';
-import { ApplicationDocument } from './ApplicationDocument';
 import { Application } from './Application';
+import { Document } from './Document';
 
 @Entity({ name: 'applicants' })
 export class Applicant {
@@ -29,21 +29,15 @@ export class Applicant {
   @OneToMany(() => Experience, (experience) => experience.applicant)
   experiences: Experience[];
 
-  // @OneToMany(() => Application, (application) => application.applicant)
-  // applications: Application[];
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(
-    () => ApplicationDocument,
-    (applicationDocument) => applicationDocument.applicant,
-  )
-  applicationDocuments: ApplicationDocument[];
-
   @OneToMany(() => Application, (application) => application.applicant)
   applications: Application[];
+
+  @ManyToMany(() => Document, (document) => document.applicant)
+  documents: Document[];
 }

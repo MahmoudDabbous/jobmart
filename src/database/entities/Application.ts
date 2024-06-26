@@ -31,7 +31,7 @@ export class Application {
   @ManyToOne(() => Job, (job) => job.applications)
   job: Job;
 
-  @ManyToOne(() => Document, (document) => document.applications)
+  @ManyToOne(() => Document, (document) => document.application)
   document: Document;
 
   @OneToMany(
