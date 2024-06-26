@@ -12,7 +12,10 @@ export class Admin {
   @PrimaryGeneratedColumn()
   adminId: string;
 
-  @OneToOne(() => User, (user) => user.admin)
+  @OneToOne(() => User, (user) => user.admin, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   user: User;
 

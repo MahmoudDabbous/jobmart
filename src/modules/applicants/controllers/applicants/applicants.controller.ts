@@ -45,7 +45,7 @@ export class ApplicantsController {
   }
 
   @Delete(':applicantId')
-  async remove(applicantId: number) {
+  async remove(@Param('applicantId', ParseIntPipe) applicantId: number) {
     return await this.applicantsService.remove(applicantId);
   }
 

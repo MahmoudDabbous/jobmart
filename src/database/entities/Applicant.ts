@@ -19,7 +19,10 @@ export class Applicant {
   @PrimaryGeneratedColumn()
   applicantId: number;
 
-  @OneToOne(() => User, (user) => user.applicant)
+  @OneToOne(() => User, (user) => user.applicant, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   user: User;
 
