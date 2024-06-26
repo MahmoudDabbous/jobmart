@@ -23,17 +23,13 @@ export class CreateJobDto {
 
   @IsNumber()
   @IsOptional()
-  jobCategoryId?: number;
+  jobCategory?: number;
 
   @IsNumber()
   @IsOptional()
-  jobPositionId?: number;
+  jobPosition?: number;
 
   @IsNumber()
   @IsOptional()
-  jobPlatformId?: number;
-
-  @IsNumber({}, { message: 'Process ID must be a number.' })
-  @IsOptional()
-  processId?: number;
+  jobPlatform?: number;
 }

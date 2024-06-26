@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { PositionService } from '../../services/position/position.service';
 import { CreatePositionDto } from '../../dto/position/create-position.dto';
@@ -17,8 +19,11 @@ export class PositionController {
   constructor(private readonly positionService: PositionService) {}
 
   @Get()
-  async findAll() {
-    return await this.positionService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+  ) {
+    return await this.positionService.findAll({ page, limit });
   }
 
   @Get(':positionId')

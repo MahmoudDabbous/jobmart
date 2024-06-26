@@ -4,6 +4,7 @@ import { JobPlatform } from 'src/database/entities/JobPlatform';
 import { Repository } from 'typeorm';
 import { CreatePlatformDto } from '../../dto/platform/create-platform.dto';
 import { UpdatePlatformDto } from '../../dto/platform/update-platform.dto';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class PlatformService {
@@ -27,8 +28,10 @@ export class PlatformService {
     await this.platformRepository.delete(jobPlatformId);
   }
 
-  async findAll() {
-    return await this.platformRepository.find();
+  async findAll(pagination: IPaginationOptions) {
+    return paginate<JobPlatform>(this.platformRepository, pagination, {
+      relations: ['jobs'],
+    });
   }
 
   async findOne(jobPlatformId: number) {

@@ -2,14 +2,13 @@ import {
   Column,
   Entity,
   ManyToOne,
-  // OneToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { JobCategory } from './JobCategory';
 import { JobPosition } from './JobPosition';
-// import { Application } from './Application';
+import { Application } from './Application';
 import { JobPlatform } from './JobPlatform';
-import { Process } from './Process';
 
 @Entity({ name: 'jobs' })
 export class Job {
@@ -37,9 +36,6 @@ export class Job {
   @ManyToOne(() => JobPlatform, (jobPlatform) => jobPlatform.jobs)
   jobPlatform: JobPlatform;
 
-  // @OneToMany(() => Application, (application) => application.job)
-  // applications: Application[];
-
-  @ManyToOne(() => Process, (process) => process.jobs)
-  process: Process;
+  @OneToMany(() => Application, (application) => application.job)
+  applications: Application[];
 }

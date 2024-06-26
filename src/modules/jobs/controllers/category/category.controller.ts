@@ -1,29 +1,36 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CategoryService } from '../../services/category/category.service';
-import { CreateJobDto } from '../../dto/jobs/create-job.dto';
 import { UpdateCategoryDto } from '../../dto/category/update-categort.dto';
+import { CreateCategoryDto } from '../../dto/category/create-category.dto';
 
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  async create(@Body() createCategoryDto: CreateJobDto) {
+  async create(@Body() createCategoryDto: CreateCategoryDto) {
     return await this.categoryService.create(createCategoryDto);
   }
 
   @Get()
-  async findAll() {
-    return await this.categoryService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), new ParseIntPipe())
+    page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), new ParseIntPipe())
+    limit: number = 10,
+  ) {
+    return await this.categoryService.findAll({ page, limit });
   }
 
   @Get(':categoryId')
