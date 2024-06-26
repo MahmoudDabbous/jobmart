@@ -13,7 +13,10 @@ export class Experience {
   @PrimaryGeneratedColumn()
   experienceId: number;
 
-  @ManyToOne(() => Applicant, (user) => user.experiences)
+  @ManyToOne(() => Applicant, (user) => user.experiences, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   applicant: Applicant;
 
   @Column()
