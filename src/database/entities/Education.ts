@@ -13,7 +13,10 @@ export class Education {
   @PrimaryGeneratedColumn()
   educationId: number;
 
-  @ManyToOne(() => Applicant, (user) => user.educations)
+  @ManyToOne(() => Applicant, (user) => user.educations, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   applicant: Applicant;
 
   @Column()
