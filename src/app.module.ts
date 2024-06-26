@@ -10,6 +10,7 @@ import { JobsModule } from './modules/jobs/jobs.module';
 import { TestModule } from './modules/test/test.module';
 import { QuestionModule } from './modules/question/question.module';
 import { GradinginfoModule } from './modules/gradinginfo/gradinginfo.module';
+import { DocumentModule } from './modules/document/document.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { GradinginfoModule } from './modules/gradinginfo/gradinginfo.module';
     TestModule,
     QuestionModule,
     GradinginfoModule,
+    DocumentModule,
   ],
 })
 export class AppModule implements NestModule {
