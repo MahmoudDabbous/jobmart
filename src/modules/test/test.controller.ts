@@ -7,12 +7,15 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { TestService } from './test.service';
 import { CreateTestDto } from './dtos/create-test.dto';
 import { UpdateTestDto } from './dtos/update-test.dto';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('tests')
+@UseGuards(AdminGuard)
 export class TestController {
   constructor(private readonly testService: TestService) {}
 

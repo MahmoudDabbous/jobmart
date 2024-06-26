@@ -14,6 +14,7 @@ import { User } from 'src/database/entities/User';
 import { IsOwnerOrAdminMiddleware } from './middlewares/is-owner-or-admin.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { MeController } from './controllers/me/me.controller';
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -28,6 +29,7 @@ import { ConfigService } from '@nestjs/config';
     ApplicantsController,
     EducationsController,
     ExperiencesController,
+    MeController,
   ],
   providers: [
     ApplicantsService,
@@ -40,6 +42,14 @@ export class ApplicantsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(IsOwnerOrAdminMiddleware)
+      .forRoutes('applicants/:applicantId');
+
+    consumer
+      .apply(IsOwnerOrAdminMiddleware)
       .forRoutes('applicants/:applicantId/*');
+
+    consumer.apply(IsOwnerOrAdminMiddleware).forRoutes('me');
+
+    consumer.apply(IsOwnerOrAdminMiddleware).forRoutes('me/*');
   }
 }

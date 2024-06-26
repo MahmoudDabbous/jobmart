@@ -39,11 +39,12 @@ export class TestService {
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     const result = await this.testRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Test with ID ${id} not found`);
     }
+    return { id };
   }
 
   async getTestQuestions(id: number) {
