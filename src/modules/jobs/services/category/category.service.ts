@@ -1,3 +1,4 @@
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobCategory } from 'src/database/entities/JobCategory';
@@ -27,8 +28,10 @@ export class CategoryService {
     await this.categoryRepository.delete(jobCategoryId);
   }
 
-  async findAll() {
-    return await this.categoryRepository.find();
+  async findAll(pagination: IPaginationOptions) {
+    return paginate<JobCategory>(this.categoryRepository, pagination, {
+      relations: ['jobs'],
+    });
   }
 
   async findOne(jobCategoryId: number) {

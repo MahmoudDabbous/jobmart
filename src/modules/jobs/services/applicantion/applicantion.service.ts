@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Application } from 'src/database/entities/Application';
 import { Repository } from 'typeorm';
@@ -115,5 +115,29 @@ export class ApplicantionService {
     }
 
     return application.document;
+  }
+
+  async findJobApplications(jobId: number, pagination: IPaginationOptions) {
+    const queryBuilder =
+      this.applicationRepository.createQueryBuilder('applications');
+    queryBuilder.leftJoinAndSelect('applications.applicant', 'applicant');
+    queryBuilder.leftJoinAndSelect('applications.job', 'job');
+    queryBuilder.leftJoinAndSelect('applicant.user', 'user');
+
+    queryBuilder.where('job.jobId = :jobId', { jobId });
+
+    const applications = await paginate<Application>(queryBuilder, pagination);
+
+    if (applications.meta.totalItems <= 0)
+      throw new NotFoundException('job has no applications');
+
+    for (const application of applications.items) {
+      const user = await this.applicantService.findOne(
+        application.applicant.user.userId,
+      );
+      application.applicant = user;
+    }
+
+    return applications;
   }
 }

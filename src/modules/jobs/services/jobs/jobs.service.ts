@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { PlatformService } from '../platform/platform.service';
 import { PositionService } from '../position/position.service';
 import { CategoryService } from '../category/category.service';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class JobsService {
@@ -19,27 +20,34 @@ export class JobsService {
   ) {}
 
   async create(data: CreateJobDto) {
-    const job = this.jobsRepasitory.create(data);
+    const job = this.jobsRepasitory.create({
+      description: data.description,
+      name: data.name,
+    });
 
-    if (data.jobCategoryId) {
-      job.jobCategory = await this.categoryService.findOne(data.jobCategoryId);
+    if (data.jobCategory) {
+      job.jobCategory = await this.categoryService.findOne(data.jobCategory);
     }
 
-    if (data.jobPositionId) {
-      job.jobPosition = await this.positionService.findOne(data.jobPositionId);
+    if (data.jobPosition) {
+      job.jobPosition = await this.positionService.findOne(data.jobPosition);
     }
 
-    if (data.jobPlatformId) {
-      job.jobPlatform = await this.platformService.findOne(data.jobPlatformId);
+    if (data.jobPlatform) {
+      job.jobPlatform = await this.platformService.findOne(data.jobPlatform);
     }
-
-    // TODO: Add process service
 
     return await this.jobsRepasitory.save(job);
   }
 
   async update(jobId: number, data: UpdateJobDto) {
-    await this.jobsRepasitory.update(jobId, data);
+    await this.jobsRepasitory.update(jobId, {
+      description: data.description,
+      name: data.name,
+      jobCategory: { jobCategoryId: data.jobCategory },
+      jobPosition: { jobPositionId: data.jobPosition },
+      jobPlatform: { jobPlatformId: data.jobPlatform },
+    });
     return await this.jobsRepasitory.findOne({
       where: { jobId },
       relations: ['jobCategory', 'jobPosition', 'jobPlatform'],
@@ -50,8 +58,8 @@ export class JobsService {
     await this.jobsRepasitory.delete(jobId);
   }
 
-  async findAll() {
-    return await this.jobsRepasitory.find({
+  async findAll(pagination: IPaginationOptions) {
+    return paginate<Job>(this.jobsRepasitory, pagination, {
       relations: ['jobCategory', 'jobPosition', 'jobPlatform'],
     });
   }

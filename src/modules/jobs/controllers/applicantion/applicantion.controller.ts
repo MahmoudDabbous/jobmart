@@ -35,6 +35,18 @@ export class ApplicantionController {
     return await this.applicantionService.findAll({ limit, page });
   }
 
+  @Get('job/:jobId')
+  async getJobApplications(
+    @Param('jobId', ParseIntPipe) jobId: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+  ) {
+    return await this.applicantionService.findJobApplications(jobId, {
+      limit,
+      page,
+    });
+  }
+
   @Delete(':applicationId')
   async deleteApplication(
     @Param('applicationId', ParseIntPipe) applicationId: number,

@@ -4,6 +4,7 @@ import { JobPosition } from 'src/database/entities/JobPosition';
 import { Repository } from 'typeorm';
 import { CreatePositionDto } from '../../dto/position/create-position.dto';
 import { UpdatePositionDto } from '../../dto/position/update-position.dto';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class PositionService {
@@ -27,8 +28,10 @@ export class PositionService {
     await this.positionRepository.delete(jobPositionId);
   }
 
-  async findAll() {
-    return await this.positionRepository.find();
+  async findAll(pagination: IPaginationOptions) {
+    return paginate<JobPosition>(this.positionRepository, pagination, {
+      relations: ['jobs'],
+    });
   }
 
   async findOne(jobPositionId: number) {

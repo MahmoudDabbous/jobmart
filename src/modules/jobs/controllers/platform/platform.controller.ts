@@ -7,6 +7,8 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { PlatformService } from '../../services/platform/platform.service';
 import { UpdatePlatformDto } from '../../dto/platform/update-platform.dto';
@@ -17,8 +19,11 @@ export class PlatformController {
   constructor(private readonly platformService: PlatformService) {}
 
   @Get()
-  async findAll() {
-    return await this.platformService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+  ) {
+    return await this.platformService.findAll({ page, limit });
   }
 
   @Get(':platformId')
