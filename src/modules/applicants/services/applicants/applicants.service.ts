@@ -7,17 +7,18 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
-import { UsersService } from 'src/modules/users/users.service';
 import { OnEvent } from '@nestjs/event-emitter';
 import { USER_CREATED } from 'src/common/constants/events';
 import { UpdateUserDto } from 'src/common/dto/update-user.dto';
+import { User } from 'src/database/entities/User';
 
 @Injectable()
 export class ApplicantsService {
   constructor(
     @InjectRepository(Applicant)
     private readonly applicantRepository: Repository<Applicant>,
-    private readonly userService: UsersService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findAll(
@@ -33,6 +34,7 @@ export class ApplicantsService {
       'user.firstName',
       'user.lastName',
       'user.email',
+      'user.username',
       'user.phone',
       'experiences',
       'educations',
@@ -52,6 +54,7 @@ export class ApplicantsService {
       'user.lastName',
       'user.email',
       'user.phone',
+      'user.username',
       'experiences',
       'educations',
     ]);
@@ -71,26 +74,31 @@ export class ApplicantsService {
 
     const userId = applicant.user.userId;
 
-    const user = await this.userService.update(userId, updateApplicantDto);
+    await this.userRepository.update(userId, updateApplicantDto);
 
-    applicant.user = user;
+    const updatedUser = await this.userRepository.findOne({
+      where: { userId },
+    });
+
+    applicant.user = updatedUser;
 
     return applicant;
   }
+
   async remove(applicantId: number): Promise<void> {
     const user = await this.findOne(applicantId);
 
-    const deleteResult = await this.applicantRepository.delete({
-      applicantId: user.applicantId,
-    });
+    await this.userRepository.remove(user.user);
 
-    if (!deleteResult.affected) {
-      throw new NotFoundException(`Applicant with ID ${applicantId} not found`);
-    }
+    await this.applicantRepository.remove(user);
+
+    return;
   }
 
   async profileIsComplete(userId: number): Promise<boolean> {
-    const user = await this.userService.getById(userId);
+    const user = await this.userRepository.findOne({
+      where: { userId },
+    });
     const applicant = await this.applicantRepository.findOne({
       where: { user: user },
     });
@@ -102,7 +110,9 @@ export class ApplicantsService {
 
   @OnEvent(USER_CREATED)
   async handleUserCreation(payload: any) {
-    const user = await this.userService.getById(payload.userId);
+    const user = await this.userRepository.findOne({
+      where: { userId: payload.userId },
+    });
     const applicant = this.applicantRepository.create();
     applicant.user = user;
     await this.applicantRepository.save(applicant);
