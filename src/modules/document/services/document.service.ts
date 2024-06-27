@@ -35,4 +35,18 @@ export class DocumentService {
   async remove(documentId: number) {
     return await this.documentRepository.delete({ documentId });
   }
+
+  async uploadDocument(applicantId: number, document: Express.Multer.File) {
+    return await this.documentRepository.save({
+      name: document.originalname,
+      url: document.path,
+      extension: document.mimetype,
+      size: document.size,
+      applicant: { user: { userId: applicantId } },
+    });
+  }
+
+  async downloadDocument(documentId: number) {
+    return await this.documentRepository.findOne({ where: { documentId } });
+  }
 }
