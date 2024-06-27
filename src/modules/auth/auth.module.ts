@@ -11,6 +11,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwtRT.strategy';
+import { EmailConfirmationService } from '../email-confirmation/email-confirmation.service';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { JwtRefreshTokenStrategy } from './strategies/jwtRT.strategy';
         },
       }),
     }),
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -35,6 +38,7 @@ import { JwtRefreshTokenStrategy } from './strategies/jwtRT.strategy';
     LocalStrategy,
     JwtStrategy,
     JwtRefreshTokenStrategy,
+    EmailConfirmationService,
   ],
 })
 export class AuthModule {}

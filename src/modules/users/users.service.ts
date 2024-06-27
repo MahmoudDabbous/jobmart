@@ -34,13 +34,57 @@ export class UsersService {
       HttpStatus.NOT_FOUND,
     );
   }
-  async isEmailTaken(email: string) {
-    const user = await this.usersRepository.findOneBy({ email });
-    if (user) {
-      return true;
-    }
-    return false;
+
+  private async isFieldTaken(
+    field: keyof User,
+    value: string,
+  ): Promise<boolean> {
+    const count = await this.usersRepository.count({
+      where: { [field]: value },
+    });
+    return count > 0;
   }
+
+  async isEmailTaken(email: string): Promise<boolean> {
+    return this.isFieldTaken('email', email);
+  }
+
+  async isPhoneTaken(phone: string): Promise<boolean> {
+    return this.isFieldTaken('phone', phone);
+  }
+
+  async isUsernameTaken(username: string): Promise<boolean> {
+    return this.isFieldTaken('username', username);
+  }
+
+  async validateUniqueFields(signUpData: CreateUserDto): Promise<void> {
+    const fieldsToValidate: (keyof CreateUserDto)[] = [
+      'email',
+      'phone',
+      'username',
+    ];
+
+    const validations = fieldsToValidate.map((field) => ({
+      field,
+      check: () => this.isFieldTaken(field, signUpData[field]),
+    }));
+
+    const takenFields = await Promise.all(
+      validations.map(async ({ field, check }) =>
+        (await check()) ? field : null,
+      ),
+    );
+
+    const conflictingFields = takenFields.filter(Boolean);
+
+    if (conflictingFields.length > 0) {
+      throw new HttpException(
+        `User with the following already exists: ${conflictingFields.join(', ')}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   async create(userData: CreateUserDto) {
     const newUser = await this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
@@ -84,5 +128,14 @@ export class UsersService {
   async update(userId: number, data: UpdateUserDto) {
     await this.usersRepository.update(userId, data);
     return await this.getById(userId);
+  }
+
+  async markEmailAsConfirmed(email: string) {
+    return this.usersRepository.update(
+      { email },
+      {
+        isEmailConfirmed: true,
+      },
+    );
   }
 }

@@ -21,19 +21,23 @@ import JwtAuthGuard from './guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import JwtRefreshGuard from './guards/jwtRefresh.guard';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { EmailConfirmationService } from '../email-confirmation/email-confirmation.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UsersService,
+    private emailConfirmtionService: EmailConfirmationService,
   ) {}
 
   @Post('signup')
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(ValidationPipe)
-  signUp(@Body() signUpData: CreateUserDto) {
-    return this.authService.signUp(signUpData);
+  async signUp(@Body() signUpData: CreateUserDto) {
+    const user = await this.authService.signUp(signUpData);
+    await this.emailConfirmtionService.sendVerificationLink(signUpData.email);
+    return user;
   }
 
   @Post('admin/signup')
