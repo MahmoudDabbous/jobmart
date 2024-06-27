@@ -6,6 +6,7 @@ import {
   Param,
   ParseFilePipeBuilder,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   StreamableFile,
@@ -96,5 +97,17 @@ export class ApplicantionController {
       type: 'application/pdf',
       disposition: 'attachment; filename="' + doc.name + '.pdf"',
     });
+  }
+
+  @Patch(':applicationId/attach/:documentId')
+  @UseGuards(JwtAuthGuard)
+  async attachDocumentToApplication(
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+    @Param('documentId', ParseIntPipe) documentId: number,
+  ) {
+    return await this.applicantionService.attachDocumentToApplication(
+      applicationId,
+      documentId,
+    );
   }
 }
