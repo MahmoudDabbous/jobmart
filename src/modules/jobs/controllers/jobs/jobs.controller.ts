@@ -17,6 +17,7 @@ import { CreateJobDto } from '../../dto/jobs/create-job.dto';
 import { UpdateJobDto } from '../../dto/jobs/update-job.dto';
 import RequestWithUser from 'src/modules/auth/interfaces/requestWithUser.interface';
 import { ApplicantionService } from '../../services/applicantion/applicantion.service';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 import JwtAuthGuard from 'src/modules/auth/guards/jwt-auth.guard';
 
 @Controller('jobs')
@@ -27,6 +28,7 @@ export class JobsController {
   ) {}
 
   @Post()
+  @UseGuards(AdminGuard)
   async create(@Body() createJobDto: CreateJobDto) {
     return await this.jobsService.create(createJobDto);
   }
@@ -45,6 +47,7 @@ export class JobsController {
   }
 
   @Patch(':jobId')
+  @UseGuards(AdminGuard)
   async update(
     @Body() updateJobDto: UpdateJobDto,
     @Param('jobId', ParseIntPipe) jobId: number,
@@ -53,6 +56,7 @@ export class JobsController {
   }
 
   @Delete(':jobId')
+  @UseGuards(AdminGuard)
   async remove(@Param('jobId', ParseIntPipe) jobId: number) {
     return await this.jobsService.delete(jobId);
   }
