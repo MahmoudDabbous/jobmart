@@ -19,6 +19,9 @@ import { ApplicantsModule } from '../applicants/applicants.module';
 import { UsersModule } from '../users/users.module';
 import { ApplicantionController } from './controllers/applicantion/applicantion.controller';
 import { DocumentModule } from '../document/document.module';
+import { UsersService } from '../users/users.service';
+import { User } from 'src/database/entities/User';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -29,6 +32,7 @@ import { DocumentModule } from '../document/document.module';
       JobPosition,
       Application,
       Applicant,
+      User,
     ]),
     ApplicantsModule,
     UsersModule,
@@ -47,6 +51,8 @@ import { DocumentModule } from '../document/document.module';
     PlatformService,
     PositionService,
     ApplicantionService,
+    UsersService,
+    JwtService,
   ],
   exports: [JobsService, CategoryService, PlatformService, PositionService],
 })
