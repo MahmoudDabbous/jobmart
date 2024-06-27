@@ -33,7 +33,10 @@ export class Application {
   @ManyToOne(() => Job, (job) => job.applications)
   job: Job;
 
-  @ManyToOne(() => Document, (document) => document.application)
+  @ManyToOne(() => Document, (document) => document.application, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   document: Document;
 
   @OneToMany(
