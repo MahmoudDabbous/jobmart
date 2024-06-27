@@ -112,6 +112,16 @@ export class ApplicantsService {
     return true;
   }
 
+  async findApplications(
+    applicantId: number,
+    pagination: IPaginationOptions,
+  ): Promise<Pagination<Applicant>> {
+    return paginate<Applicant>(this.applicantRepository, pagination, {
+      where: { user: { userId: applicantId } },
+      relations: ['applications'],
+    });
+  }
+
   @OnEvent(USER_CREATED)
   async handleUserCreation(payload: any) {
     const user = await this.userRepository.findOne({
