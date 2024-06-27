@@ -129,4 +129,13 @@ export class UsersService {
     await this.usersRepository.update(userId, data);
     return await this.getById(userId);
   }
+
+  async markEmailAsConfirmed(email: string) {
+    return this.usersRepository.update(
+      { email },
+      {
+        isEmailConfirmed: true,
+      },
+    );
+  }
 }

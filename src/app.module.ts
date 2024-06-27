@@ -11,6 +11,8 @@ import { TestModule } from './modules/test/test.module';
 import { QuestionModule } from './modules/question/question.module';
 import { GradinginfoModule } from './modules/gradinginfo/gradinginfo.module';
 import { DocumentModule } from './modules/document/document.module';
+import { EmailModule } from './modules/email/email.module';
+import { EmailConfirmationModule } from './modules/email-confirmation/email-confirmation.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { DocumentModule } from './modules/document/document.module';
     QuestionModule,
     GradinginfoModule,
     DocumentModule,
+    EmailModule,
+    EmailConfirmationModule,
   ],
 })
 export class AppModule implements NestModule {

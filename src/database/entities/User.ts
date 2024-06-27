@@ -54,6 +54,9 @@ export class User {
   @Exclude()
   public currentHashedRefreshToken?: string;
 
+  @Column({ default: false })
+  public isEmailConfirmed: boolean;
+
   @OneToOne(() => Applicant, (applicant) => applicant.user)
   applicant: Applicant;
 
