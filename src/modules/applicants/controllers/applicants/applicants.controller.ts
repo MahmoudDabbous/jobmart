@@ -53,4 +53,16 @@ export class ApplicantsController {
   async profileIsComplete(userId: number) {
     return await this.applicantsService.profileIsComplete(userId);
   }
+
+  @Get(':applicantId/applications')
+  async findApplications(
+    @Param('applicantId', ParseIntPipe) applicantId: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+  ) {
+    return await this.applicantsService.findApplications(applicantId, {
+      page,
+      limit,
+    });
+  }
 }

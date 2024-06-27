@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
@@ -116,5 +117,17 @@ export class MeController {
     @Body() data: CreateExperienceDto,
   ) {
     return await this.experienceService.create(req.user.userId, data);
+  }
+
+  @Get('applications')
+  async findApplications(
+    @Req() req: RequestWithUser,
+    @Param('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Param('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+  ) {
+    return await this.applicantsService.findApplications(req.user.userId, {
+      page,
+      limit,
+    });
   }
 }

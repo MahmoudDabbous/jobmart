@@ -5,6 +5,8 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Test } from './Test';
 import { GradingInfo } from './GradingInfo';
@@ -39,4 +41,10 @@ export class Application {
     (applicationTest) => applicationTest.application,
   )
   applicationTests: ApplicationTest[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
