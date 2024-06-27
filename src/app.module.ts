@@ -11,6 +11,7 @@ import { TestModule } from './modules/test/test.module';
 import { QuestionModule } from './modules/question/question.module';
 import { GradinginfoModule } from './modules/gradinginfo/gradinginfo.module';
 import { DocumentModule } from './modules/document/document.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { DocumentModule } from './modules/document/document.module';
     QuestionModule,
     GradinginfoModule,
     DocumentModule,
+    ReportsModule,
   ],
 })
 export class AppModule implements NestModule {

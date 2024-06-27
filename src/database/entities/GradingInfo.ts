@@ -4,6 +4,8 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Application } from './Application';
 
@@ -27,4 +29,10 @@ export class GradingInfo {
   @OneToOne(() => Application, (application) => application.gradingInfo)
   @JoinColumn()
   application: Application;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
