@@ -36,6 +36,10 @@ export class Document {
   @JoinColumn()
   application: Application;
 
-  @ManyToOne(() => Applicant, (applicant) => applicant.documents)
+  @ManyToOne(() => Applicant, (applicant) => applicant.documents, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   applicant: Applicant;
 }
