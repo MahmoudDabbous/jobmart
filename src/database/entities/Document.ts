@@ -29,10 +29,17 @@ export class Document {
   @UpdateDateColumn()
   lastUpdated: Date;
 
-  @ManyToOne(() => Application, (application) => application.document)
+  @ManyToOne(() => Application, (application) => application.document, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   application: Application;
 
-  @ManyToOne(() => Applicant, (applicant) => applicant.documents)
+  @ManyToOne(() => Applicant, (applicant) => applicant.documents, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   applicant: Applicant;
 }

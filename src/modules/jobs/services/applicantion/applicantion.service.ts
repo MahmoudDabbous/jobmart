@@ -140,4 +140,19 @@ export class ApplicantionService {
 
     return applications;
   }
+
+  async attachDocumentToApplication(applicationId: number, documentId: number) {
+    await this.applicationRepository.update(
+      {
+        applicationId,
+      },
+      {
+        document: { documentId },
+      },
+    );
+
+    await this.documentService.attachToApplication(applicationId, documentId);
+
+    return { message: 'Document attached to application successfully' };
+  }
 }
