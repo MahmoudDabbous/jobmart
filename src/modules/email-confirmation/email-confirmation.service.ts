@@ -14,14 +14,26 @@ export class EmailConfirmationService {
     private readonly userService: UsersService,
   ) {}
 
-  sendVerificationLink(email: string) {
+  async sendVerificationLink(email: string) {
     const payload: VerificationTokenPayload = { email };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
       expiresIn: `${this.configService.get('JWT_VERIFICATION_TOKEN_EXPIRATION_TIME')}s`,
     });
     const url = `${this.configService.get('EMAIL_CONFIRMATION_URL')}?token=${token}`;
-    const text = `Welcome to the JobMart. To confirm the email address, click here: ${url}`;
+    const user = await this.userService.getByEmail(email);
+    const text = `
+    Hey ${user.firstName},
+
+    Thank you for registering with JobMart. To complete your registration and verify your email address, please click the link below:
+
+    ${url}
+
+    If you didn't register for JobMart, you can safely ignore this email.
+
+    Best regards,
+    The JobMart Team
+    `;
     return this.emailService.sendMail({
       to: email,
       subject: 'JobMart | Email confirmation',
