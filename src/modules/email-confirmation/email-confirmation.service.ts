@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
 import VerificationTokenPayload from './interfaces/verificationTokenPayload.interface';
 import { UsersService } from '../users/users.service';
+import { TemplatesService } from '../templates/templates.service';
 
 @Injectable()
 export class EmailConfirmationService {
@@ -12,6 +13,7 @@ export class EmailConfirmationService {
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
     private readonly userService: UsersService,
+    private readonly templatesService: TemplatesService,
   ) {}
 
   async sendVerificationLink(email: string) {
@@ -22,22 +24,31 @@ export class EmailConfirmationService {
     });
     const url = `${this.configService.get('EMAIL_CONFIRMATION_URL')}?token=${token}`;
     const user = await this.userService.getByEmail(email);
-    const text = `
-    Hey ${user.firstName},
 
-    Thank you for registering with JobMart. To complete your registration and verify your email address, please click the link below:
+    const context = {
+      subject: 'JobMart | Email confirmation',
+      content: `
+      Hey ${user.firstName},<br><br>
 
-    ${url}
+      Thank you for registering with JobMart. To complete your registration and verify your email address, please click the link below:<br><br>
 
-    If you didn't register for JobMart, you can safely ignore this email.
+      <a href="${url}">Verify Email</a><br><br>
 
-    Best regards,
-    The JobMart Team
-    `;
+      If you didn't register for JobMart, you can safely ignore this email.<br><br>
+
+      Best regards,<br>
+      The JobMart Team
+      `,
+      logoUrl: this.configService.get<string>('LOGO_URL'),
+      currentYear: new Date().getFullYear(),
+    };
+
+    const html = this.templatesService.generateHtml('general', context);
+
     return this.emailService.sendMail({
       to: email,
       subject: 'JobMart | Email confirmation',
-      text,
+      html,
     });
   }
 

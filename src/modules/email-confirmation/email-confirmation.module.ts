@@ -7,9 +7,10 @@ import { EmailService } from '../email/email.service';
 import { UsersService } from '../users/users.service';
 import { User } from 'src/database/entities/User';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TemplatesModule } from '../templates/templates.module';
 
 @Module({
-  imports: [ConfigModule, TypeOrmModule.forFeature([User])],
+  imports: [ConfigModule, TypeOrmModule.forFeature([User]), TemplatesModule],
   providers: [EmailConfirmationService, JwtService, EmailService, UsersService],
   controllers: [EmailConfirmationController],
 })
