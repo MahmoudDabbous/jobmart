@@ -110,4 +110,13 @@ export class ApplicantionController {
       documentId,
     );
   }
+
+  @Post(':applicationId/assign-test/:testId')
+  @UseGuards(AdminGuard)
+  async assignTest(
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+    @Param('testId', ParseIntPipe) testId: number,
+  ) {
+    return await this.applicantionService.assignTest(applicationId, testId);
+  }
 }

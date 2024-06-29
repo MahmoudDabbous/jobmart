@@ -22,6 +22,7 @@ import { DocumentModule } from '../document/document.module';
 import { UsersService } from '../users/users.service';
 import { User } from 'src/database/entities/User';
 import { JwtService } from '@nestjs/jwt';
+import { Test } from 'src/database/entities/Test';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { JwtService } from '@nestjs/jwt';
       Application,
       Applicant,
       User,
+      Test,
     ]),
     ApplicantsModule,
     UsersModule,

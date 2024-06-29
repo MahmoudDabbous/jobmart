@@ -6,6 +6,7 @@ import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { ApplicantsService } from 'src/modules/applicants/services/applicants/applicants.service';
 import { JobsService } from 'src/modules/jobs/services/jobs/jobs.service';
 import { DocumentService } from 'src/modules/document/services/document.service';
+import { Test } from 'src/database/entities/Test';
 // import { UpdateApplicationDto } from '../../dto/application/update-application.dto';
 
 @Injectable()
@@ -16,6 +17,8 @@ export class ApplicantionService {
     private readonly applicantService: ApplicantsService,
     private readonly jobService: JobsService,
     private readonly documentService: DocumentService,
+    @InjectRepository(Test)
+    private readonly testRepository: Repository<Test>,
   ) {}
 
   async apply(applicantId: number, jobId: number) {
@@ -154,5 +157,32 @@ export class ApplicantionService {
     await this.documentService.attachToApplication(applicationId, documentId);
 
     return { message: 'Document attached to application successfully' };
+  }
+
+  async assignTest(
+    applicationId: number,
+    testId: number,
+  ): Promise<Application> {
+    const application = await this.applicationRepository.findOne({
+      where: { applicationId },
+      relations: ['test'],
+    });
+
+    if (!application) {
+      throw new NotFoundException(
+        `Application with ID ${applicationId} not found`,
+      );
+    }
+
+    const test = await this.testRepository.findOne({
+      where: { testId },
+    });
+
+    if (!test) {
+      throw new NotFoundException(`Test with ID ${testId} not found`);
+    }
+
+    application.test = test;
+    return this.applicationRepository.save(application);
   }
 }
