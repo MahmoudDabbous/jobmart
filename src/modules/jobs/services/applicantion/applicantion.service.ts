@@ -36,7 +36,7 @@ export class ApplicantionService {
   async findOne(applicationId: number) {
     const application = await this.applicationRepository.findOne({
       where: { applicationId },
-      relations: ['applicant', 'job', 'applicant.user'],
+      relations: ['applicant', 'job', 'applicant.user', 'test'],
     });
 
     const user = await this.applicantService.findOne(
