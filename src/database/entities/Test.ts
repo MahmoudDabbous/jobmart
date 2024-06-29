@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Question } from './Question';
 import { Application } from './Application';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class Test {
@@ -21,4 +22,7 @@ export class Test {
 
   @OneToMany(() => Application, (application) => application.test)
   applications: Application[];
+
+  @Expose()
+  applicationCount: number;
 }
