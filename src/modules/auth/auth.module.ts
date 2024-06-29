@@ -13,6 +13,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwtRT.strategy';
 import { EmailConfirmationService } from '../email-confirmation/email-confirmation.service';
 import { EmailModule } from '../email/email.module';
+import { TemplatesModule } from '../templates/templates.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EmailModule } from '../email/email.module';
       }),
     }),
     EmailModule,
+    TemplatesModule,
   ],
   controllers: [AuthController],
   providers: [

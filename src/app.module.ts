@@ -14,6 +14,8 @@ import { DocumentModule } from './modules/document/document.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { EmailModule } from './modules/email/email.module';
 import { EmailConfirmationModule } from './modules/email-confirmation/email-confirmation.module';
+import { CustomEmailModule } from './modules/custom-email/custom-email.module';
+import { TemplatesModule } from './modules/templates/templates.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { EmailConfirmationModule } from './modules/email-confirmation/email-conf
     ReportsModule,
     EmailModule,
     EmailConfirmationModule,
+    CustomEmailModule,
+    TemplatesModule,
   ],
 })
 export class AppModule implements NestModule {
