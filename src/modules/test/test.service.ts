@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateTestDto } from './dtos/create-test.dto';
 import { UpdateTestDto } from './dtos/update-test.dto';
 import { Pagination, paginate } from 'nestjs-typeorm-paginate';
@@ -21,16 +21,27 @@ export class TestService {
   async findAll(
     page: number = 1,
     limit: number = 10,
-  ): Promise<Pagination<Test>> {
-    return paginate<Test>(this.testRepository, { page, limit });
+  ): Promise<Pagination<Test & { applicationCount: number }>> {
+    const queryBuilder: SelectQueryBuilder<Test> = this.testRepository
+      .createQueryBuilder('test')
+      .leftJoinAndSelect('test.applications', 'application')
+      .loadRelationCountAndMap('test.applicationCount', 'test.applications');
+    return paginate<Test>(queryBuilder, { page, limit });
   }
 
-  async findOne(id: number): Promise<Test> {
-    const test = await this.testRepository.findOne({ where: { testId: id } });
+  async findOne(id: number): Promise<Test & { applicationCount: number }> {
+    const test = await this.testRepository.findOne({
+      where: { testId: id },
+      relations: ['applications'],
+    });
     if (!test) {
       throw new NotFoundException(`Test with ID ${id} not found`);
     }
-    return test;
+    const applicationCount = test.applications.length;
+    return {
+      ...test,
+      applicationCount,
+    };
   }
 
   async update(id: number, updateTestDto: UpdateTestDto): Promise<Test> {

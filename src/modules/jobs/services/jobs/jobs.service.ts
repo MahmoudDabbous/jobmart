@@ -23,6 +23,7 @@ export class JobsService {
     const job = this.jobsRepasitory.create({
       description: data.description,
       name: data.name,
+      numberOfVacancies: data.numberOfVacancies,
     });
 
     if (data.jobCategory) {

@@ -33,8 +33,12 @@ export class TestController {
 
   @Get(':id')
   @UseGuards(AdminGuard)
-  findOne(@Param('id') id: string) {
-    return this.testService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const test = await this.testService.findOne(+id);
+    return {
+      ...test,
+      applicationCount: test.applicationCount,
+    };
   }
 
   @Put(':id')

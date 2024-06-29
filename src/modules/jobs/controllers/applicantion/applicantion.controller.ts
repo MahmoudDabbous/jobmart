@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -109,5 +110,11 @@ export class ApplicantionController {
       applicationId,
       documentId,
     );
+  }
+
+  @Post('assign-test')
+  @UseGuards(AdminGuard)
+  async assignTest(@Body() { applicationId, testId }) {
+    return await this.applicantionService.assignTest(applicationId, testId);
   }
 }
