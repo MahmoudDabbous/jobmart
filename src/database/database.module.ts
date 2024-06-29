@@ -13,6 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
+        ssl: config.get<boolean>('DB_SSL'),
         autoLoadEntities: true,
         entities: ['dist/database/entities/*.js'],
         synchronize: true,
