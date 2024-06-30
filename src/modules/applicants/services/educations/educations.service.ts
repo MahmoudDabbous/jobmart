@@ -20,7 +20,7 @@ export class EducationsService {
     const newEducation = await this.educationRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const applicant = await transactionalEntityManager.findOne(Applicant, {
-          where: { applicantId },
+          where: { user: { userId: applicantId } },
         });
 
         if (!applicant) {
@@ -31,10 +31,10 @@ export class EducationsService {
 
         const education = this.educationRepository.create(data);
         education.applicant = applicant;
-        this.educationRepository.save(education);
         return education;
       },
     );
+    this.educationRepository.save(newEducation);
     return newEducation;
   }
 
@@ -71,7 +71,7 @@ export class EducationsService {
 
   async findAll(applicantId: number): Promise<Education[]> {
     return await this.educationRepository.find({
-      where: { applicant: { applicantId } },
+      where: { applicant: { user: { userId: applicantId } } },
     });
   }
 }

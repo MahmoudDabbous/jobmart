@@ -20,7 +20,7 @@ export class ExperiencesService {
     const newExperience = await this.experienceRepository.manager.transaction(
       async (transactionalEntityManager) => {
         const applicant = await transactionalEntityManager.findOne(Applicant, {
-          where: { applicantId },
+          where: { user: { userId: applicantId } },
         });
 
         if (!applicant) {
@@ -31,10 +31,10 @@ export class ExperiencesService {
 
         const experience = this.experienceRepository.create(data);
         experience.applicant = applicant;
-        this.experienceRepository.save(experience);
         return experience;
       },
     );
+    this.experienceRepository.save(newExperience);
 
     return newExperience;
   }
@@ -78,7 +78,7 @@ export class ExperiencesService {
 
   async findAll(applicantId: number): Promise<Experience[]> {
     return await this.experienceRepository.find({
-      where: { applicant: { applicantId } },
+      where: { applicant: { user: { userId: applicantId } } },
     });
   }
 }
