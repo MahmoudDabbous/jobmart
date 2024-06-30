@@ -15,5 +15,6 @@ export class CreateGradingInfoDto {
   answerDetails: string;
 
   @IsNumber()
+  @IsNotEmpty()
   applicationId: number;
 }
