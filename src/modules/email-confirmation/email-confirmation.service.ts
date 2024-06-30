@@ -22,7 +22,7 @@ export class EmailConfirmationService {
       secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
       expiresIn: `${this.configService.get('JWT_VERIFICATION_TOKEN_EXPIRATION_TIME')}s`,
     });
-    const url = `${this.configService.get('EMAIL_CONFIRMATION_URL')}?token=${token}`;
+    const url = `${this.configService.get('EMAIL_CONFIRMATION_URL')}/confirm?token=${token}`;
     const user = await this.userService.getByEmail(email);
 
     const context = {

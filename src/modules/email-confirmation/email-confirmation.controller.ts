@@ -1,6 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Redirect,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { EmailConfirmationService } from './email-confirmation.service';
-import ConfirmEmailDto from './dtos/confirm-email.dto';
 import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
 import RequestWithUser from '../auth/interfaces/requestWithUser.interface';
 
@@ -11,11 +18,20 @@ export class EmailConfirmationController {
   ) {}
 
   @Get('confirm')
-  async confirm(@Body() confirmationData: ConfirmEmailDto) {
-    const email = await this.emailConfirmationService.decodeConfirmationToken(
-      confirmationData.token,
-    );
-    await this.emailConfirmationService.confirmEmail(email);
+  @Redirect('')
+  async confirm(@Query('token') token: string) {
+    try {
+      const email =
+        await this.emailConfirmationService.decodeConfirmationToken(token);
+      await this.emailConfirmationService.confirmEmail(email);
+      if (process.env.FRONTEND_URL) {
+        return { url: process.env.FRONTEND_URL + '/email-confirm' };
+      }
+    } catch (error) {
+      if (process.env.FRONTEND_URL) {
+        return { url: process.env.FRONTEND_URL + '/email-fail' };
+      }
+    }
   }
 
   @Post('resend-confirmation-link')
